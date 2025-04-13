@@ -16,4 +16,6 @@ sudo apt install build-essential freeglut3-dev
 ```
 
 ### Como compilar e rodar (makefile):
-`make run`
+```
+make run
+```
