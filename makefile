@@ -5,7 +5,7 @@ BIN = $(BUILD_DIR)/raycasting
 
 # Compilador e flags
 CXX = g++
-CXXFLAGS = -Wall -std=c++11
+CXXFLAGS = -Wall -std=c++17 -O3
 LDFLAGS = -lGL -lGLU -lglut
 
 # Fontes
