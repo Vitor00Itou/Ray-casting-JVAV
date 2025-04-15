@@ -19,12 +19,15 @@ static float zcam = 0;
 static bool IsRayCastingON = false;
 
 
-// Ângulos da câmera (rotação horizontal e vertical)
+// Variáveis para movimentação da camera
 static float yaw = -90.0f;   // Ângulo horizontal (inicia virado para -Z)
 static float pitch = 0.0f;    // Ângulo vertical
-static float lastX = WIDTH / 2.0f; // Posição anterior do mouse (X)
-static float lastY = HEIGHT / 2.0f; // Posição anterior do mouse (Y)
-static bool firstMouse = true; // Flag para o primeiro movimento
+int windowWidth = WIDTH;
+int windowHeight = HEIGHT;
+int centerX = windowWidth / 2;
+int centerY = windowHeight / 2;
+bool justWarped = false;
+
 
 
 RayCastingRenderer rayCastingRenderer(WIDTH, HEIGHT);
@@ -109,38 +112,32 @@ inline float radians(float degrees) {
 }
 
 
+
 void mouseMovement(int x, int y) {
-    if (firstMouse) {
-        lastX = x;
-        lastY = y;
-        firstMouse = false;
+    if (justWarped) {
+        justWarped = false;
+        return;
     }
 
-    float sensitivity = 0.1f; // Ajuste a sensibilidade
-    float deltaX = (x - lastX) * sensitivity;
-    float deltaY = (lastY - y) * sensitivity; // Invertido (Y cresce para baixo)
+    float deltaX = x - centerX;
+    float deltaY = centerY - y; // Inverte o Y (cima positivo)
 
-    lastX = x;
-    lastY = y;
+    float sensitivity = 0.1f;
+    yaw += deltaX * sensitivity;
+    pitch += deltaY * sensitivity;
 
-    // Atualiza ângulos
-    yaw += deltaX;
-    pitch += deltaY;
-
-    // Limita o pitch para evitar "gimbal lock"
     if (pitch > 89.0f) pitch = 89.0f;
     if (pitch < -89.0f) pitch = -89.0f;
 
-    // Calcula a nova direção da câmera
     Vec3 direction;
     direction.x = cos(radians(yaw)) * cos(radians(pitch));
     direction.y = sin(radians(pitch));
     direction.z = sin(radians(yaw)) * cos(radians(pitch));
     camera.forward = direction.normalize();
 
-    // glutWarpPointer(WIDTH / 2, HEIGHT / 2); // Centraliza o cursor
-    // lastX = WIDTH / 2.0f;
-    // lastY = HEIGHT / 2.0f;
+    // Agora sim, centraliza o mouse
+    justWarped = true;
+    glutWarpPointer(centerX, centerY);
 
     glutPostRedisplay();
 }
@@ -162,8 +159,9 @@ int main(int argc, char** argv) {
 
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
-    //glutSetCursor(GLUT_CURSOR_NONE); // Esconde o cursor
+    glutSetCursor(GLUT_CURSOR_NONE); // Esconde o cursor
     glutPassiveMotionFunc(mouseMovement); // Configura o callback do mouse
+    glutWarpPointer(centerX, centerY); 
 
     glutMainLoop();
     return 0;
