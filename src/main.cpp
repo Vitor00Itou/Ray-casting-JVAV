@@ -79,17 +79,22 @@ void keyboard(unsigned char key, int x, int y) {
             break;
 
         case 'w':
-            camera.position.z -= 0.1;
+            //Faz a camera andar na direção que a camera aponta
+            camera.position = camera.position + camera.forward.normalize()*0.1;
             break;
         case 's':
-            camera.position.z += 0.1;
+            camera.position = camera.position - camera.forward.normalize()*0.1;
             break;
-        case 'a':
-            camera.position.x += 0.1;
+        case 'a':{
+            Vec3 right = (camera.forward.cross(camera.up)).normalize();  // Acha a direta da camera
+            camera.position = camera.position + right * 0.1f; // Move para a esquerda
             break;
-        case 'd':
-            camera.position.x -= 0.1;
+        }
+        case 'd':{
+            Vec3 right = (camera.forward.cross(camera.up)).normalize();  // Acha a direta da camera
+            camera.position = camera.position - right * 0.1f; // Move para a direita
             break;
+        }
         case 'k':
             IsRayCastingON = !IsRayCastingON;
             break;
