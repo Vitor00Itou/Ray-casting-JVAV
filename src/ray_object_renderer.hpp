@@ -3,11 +3,11 @@
 #include "camera.hpp"
 #include <vector>
 
-struct Renderer {
+struct RayObjectRenderer {
     int width, height;
     std::vector<unsigned char> framebuffer;
 
-    Renderer(int w, int h) : width(w), height(h), framebuffer(w * h * 3, 0) {}
+    RayObjectRenderer(int w, int h) : width(w), height(h), framebuffer(w * h * 3, 0) {}
 
     void render(const Scene& scene, const Camera& camera) {
         for (int y = 0; y < height; ++y) {
@@ -17,13 +17,6 @@ struct Renderer {
                 Ray ray = camera.getRay(u, v);
 
                 Color color(0.2f, 0.2f, 0.4f); // fundo
-
-                // hitou blz
-                // novo raio do hit pra luz
-                // verificar interseção do novo raio com todos os obj
-                //      se hitar em algum, já era SOMBRA
-                //      se não, é LUZ
-                //          sendo luz, pegar a contribuição de luz ()
 
                 for (const auto& obj : scene.objects) {
                     auto hit = obj.intersect(ray);

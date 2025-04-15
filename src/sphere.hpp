@@ -9,11 +9,22 @@ struct HitInfo {
     Vec3 normal;
 };
 
+struct Color {
+    float r, g, b;
+
+    Color() : r(1.0), g(1.0), b(1.0) {}
+    Color(float r, float g, float b) : r(r), g(g), b(b) {}
+};
+
 struct Sphere {
     Vec3 center;
     float radius;
+    Color color;
 
-    Sphere(Vec3 c, float r) : center(c), radius(r) {}
+    Sphere(Vec3 c, float r) : center(c), radius(r) {
+        color = Color(1.0, 1.0, 1.0);
+    }
+    Sphere(Vec3 c, float r, Color color) : center(c), radius(r), color(color) {}
 
     std::optional<HitInfo> intersect(const Ray& ray) const {
         Vec3 oc = ray.origin - center;
