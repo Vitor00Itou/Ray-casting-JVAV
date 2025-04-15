@@ -1,4 +1,5 @@
-#include "renderer.hpp"
+#include "ray_casting_renderer.hpp"
+#include "ray_object_renderer.hpp"
 #include "scene.hpp"
 #include "sphere.hpp"
 #include "camera.hpp"
@@ -14,7 +15,10 @@ static float xcam = 0;
 static float ycam = 0;
 static float zcam = 0;
 
-Renderer renderer(WIDTH, HEIGHT);
+static bool IsRayCastingON = false;
+
+RayCastingRenderer rayCastingRenderer(WIDTH, HEIGHT);
+RayObjectRenderer rayObjectRenderer(WIDTH, HEIGHT);
 Scene scene;
 Camera camera;
 
@@ -35,18 +39,26 @@ void setupScene() {
     ));
 
     // Adiciona esferas à cena
-    scene.objects.push_back(Sphere(lightPos, 1.0));
+    //scene.objects.push_back(Sphere(lightPos, 1.0));
+    scene.objects.push_back(Sphere(Vec3(0, 3, -5), 1.0f, Color(1.0, 0.0, 0.0)));
     scene.objects.push_back(Sphere(Vec3(0, 0, -5), 1.0f, Color(1.0, 0.0, 0.0)));
-    scene.objects.push_back(Sphere(Vec3(-2, 0, -6), 1.0f));
-    scene.objects.push_back(Sphere(Vec3(2, 1, -7), 1.0f));
+    scene.objects.push_back(Sphere(Vec3(-2, 0, -6), 1.0f, Color(0.0, 1.0, 0.0)));
+    scene.objects.push_back(Sphere(Vec3(2, 1, -7), 1.0f, Color(0.0, 1.0, 1.0)));
 }
 
 void display() {
-    // Renderiza a imagem
-    renderer.render(scene, camera);
-
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, renderer.getFramebuffer().data());
+
+    // Renderiza a imagem
+    if (IsRayCastingON)
+    {
+        rayCastingRenderer.render(scene, camera);
+        glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, rayCastingRenderer.getFramebuffer().data());
+    }else{
+        rayObjectRenderer.render(scene, camera);
+        glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, rayObjectRenderer.getFramebuffer().data());
+    }
+
     glutSwapBuffers();
 }
 
@@ -68,6 +80,10 @@ void keyboard(unsigned char key, int x, int y) {
         case 'd':
             camera.position.x -= 0.1;
             break;
+        case 'k':
+            IsRayCastingON = !IsRayCastingON;
+            break;
+            
     }
 
     glutPostRedisplay();

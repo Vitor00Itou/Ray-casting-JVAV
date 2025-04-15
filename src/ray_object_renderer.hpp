@@ -19,8 +19,8 @@ struct RayObjectRenderer {
                 Color color(0.2f, 0.2f, 0.4f); // fundo
 
                 for (const auto& obj : scene.objects) {
-                    auto hit = obj.intersect(ray);
-                    if (hit) {
+                    HitInfo hit = obj.intersect(ray);
+                    if (hit.hasHit) {
                         color = obj.color;
                         break;
                     }
