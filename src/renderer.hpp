@@ -25,11 +25,22 @@ struct Renderer {
                 //      se não, é LUZ
                 //          sendo luz, pegar a contribuição de luz ()
 
+                Ray shadowRay;
+                Light light = scene.lightSources.at(0);
                 for (const auto& obj : scene.objects) {
                     auto hit = obj.intersect(ray);
-                    if (hit) {
-                        color = obj.color;
+                    if (hit.hasHit) {
+                        shadowRay = Ray(hit.point, light.position);
                         break;
+                    }
+                }
+
+                for (const auto& obj : scene.objects) {
+                    auto hit = obj.intersect(shadowRay);
+                    if (hit.hasHit) {
+                        color = Color(0,0,0); // se o shadow ray bater em alguma coisa, é PRETO
+                    } else {
+                        color = obj.color;
                     }
                 }
 

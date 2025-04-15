@@ -13,8 +13,8 @@ struct Vec3 {
     
     float angle(Vec3& v1, Vec3& v2) {
         float dot = v1.dot(v2);
-        float normA = v1.length();
-        float normB = v2.length();
+        float normA = v1.norm();
+        float normB = v2.norm();
         return acos(dot / (normA * normB));
     }
     float dot(const Vec3& v) const { return x * v.x + y * v.y + z * v.z; }
@@ -22,7 +22,7 @@ struct Vec3 {
         float len = std::sqrt(x*x + y*y + z*z);
         return (len > 0) ? (*this * (1.0f / len)) : Vec3();
     }
-    float length() {
+    float norm() {
         return sqrt(x * x + y * y + z * z);
     }
 };
