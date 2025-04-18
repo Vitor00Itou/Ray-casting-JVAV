@@ -21,7 +21,7 @@ struct RayObjectRenderer {
                 for (const auto& obj : scene.objects) {
                     HitInfo hit = obj.intersect(ray);
                     if (hit.hasHit) {
-                        color = obj.color;
+                        color = obj.texture.getColorFromImgCoordinates(hit.surfaceCoord);
                         break;
                     }
                 }
