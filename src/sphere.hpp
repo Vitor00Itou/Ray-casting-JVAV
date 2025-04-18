@@ -1,7 +1,10 @@
 #pragma once
+
+#include <optional>
+
 #include "vec3.hpp"
 #include "ray.hpp"
-#include <optional>
+#include "texture.hpp"
 
 struct HitInfo {
     float t;
@@ -10,22 +13,19 @@ struct HitInfo {
     bool hasHit;
 };
 
-struct Color {
-    float r, g, b;
-
-    Color() : r(1.0), g(1.0), b(1.0) {}
-    Color(float r, float g, float b) : r(r), g(g), b(b) {}
-};
-
 struct Sphere {
     Vec3 center;
     float radius;
     Color color;
+    Texture texture;
 
-    Sphere(Vec3 c, float r) : center(c), radius(r) {
-        color = Color(1.0, 1.0, 1.0);
+    Sphere(Vec3 c, float r) : center(c), radius(r) { }
+    Sphere(Vec3 c, float r, Color color) : center(c), radius(r), color(color) {
+        texture = Texture(color, 1, 1);
     }
-    Sphere(Vec3 c, float r, Color color) : center(c), radius(r), color(color) {}
+    Sphere(Vec3 c, float r, const char* textureName) : center(c), radius(r) {
+        texture = Texture(textureName);
+    }
 
     HitInfo intersect(const Ray& ray) const {
         Vec3 oc = ray.origin - center;
