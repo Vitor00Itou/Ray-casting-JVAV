@@ -47,22 +47,22 @@ void setupScene() {
     );
 
     // Luzes zuluzes
-    Vec3 lightPos(2, -8, -5);
+    Vec3 lightPos(2, 7, -5);
     scene.lightSources.push_back(Light(
         lightPos,
         1.0
     ));
 
     // Adiciona esferas à cena
-    //scene.objects.push_back(Sphere(lightPos, 1.0));
-    scene.objects.push_back(Sphere(Vec3(0, 3, -5), 1.0f, Color(1.0, 0.0, 0.0)));
-    scene.objects.push_back(Sphere(Vec3(0, 0, -5), 1.0f, "assets/earth.png"));
-    scene.objects.push_back(Sphere(Vec3(-2, 0, -6), 1.0f, Color(0.0, 1.0, 0.0)));
-    scene.objects.push_back(Sphere(Vec3(2, 1, -7), 1.0f, Color(0.0, 1.0, 1.0)));
+    scene.objects.push_back(Sphere(Vec3(2, 2, -5), 1.0, "assets/sol.jpg"));
+    scene.objects.push_back(Sphere(Vec3(0, -3, -5), 1.0f, "assets/uranus.jpg"));
+    scene.objects.push_back(Sphere(Vec3(0, 0, -5), 1.0f, "assets/earth albedo.jpg"));
+    scene.objects.push_back(Sphere(Vec3(-2, 0, -6), 1.0f, "assets/Jupitar.jpg"));
+    scene.objects.push_back(Sphere(Vec3(2, 1, -7), 1.0f, "assets/uranus.jpg"));
 
     // Adiciona planos à cena
     //scene.planes.push_back(Plane(Vec3(0,1,0), Vec3(0,1,0), "assets/earth.png"));
-    scene.planes.push_back(Plane(Vec3(0,1,0), Vec3(0,1,0)));
+    scene.planes.push_back(Plane(Vec3(0,-2,0), Vec3(0,1,0)));
 }
 
 void display() {
@@ -96,12 +96,12 @@ void keyboard(unsigned char key, int x, int y) {
             break;
         case 'a':{
             Vec3 right = (camera.forward.cross(camera.up)).normalize();  // Acha a direta da camera
-            camera.position = camera.position + right * 0.1f; // Move para a esquerda
+            camera.position = camera.position - right * 0.1f; // Move para a esquerda
             break;
         }
         case 'd':{
             Vec3 right = (camera.forward.cross(camera.up)).normalize();  // Acha a direta da camera
-            camera.position = camera.position - right * 0.1f; // Move para a direita
+            camera.position = camera.position + right * 0.1f; // Move para a direita
             break;
         }
         case 'k':
@@ -109,10 +109,10 @@ void keyboard(unsigned char key, int x, int y) {
             break;
 
         case ' ':  // Espaço sobe
-            camera.position.y -= 0.1f;
+            camera.position.y += 0.1f;
             break;
         case 'c':  // Espaço sobe
-            camera.position.y += 0.1f;
+            camera.position.y -= 0.1f;
             break;
             
     }
@@ -136,8 +136,8 @@ void mouseMovement(int x, int y) {
     float deltaY = centerY - y; // Inverte o Y (cima positivo)
 
     float sensitivity = 0.1f;
-    yaw -= deltaX * sensitivity;
-    pitch -= deltaY * sensitivity;
+    yaw += deltaX * sensitivity;
+    pitch += deltaY * sensitivity;
 
     if (pitch > 89.0f) pitch = 89.0f;
     if (pitch < -89.0f) pitch = -89.0f;
