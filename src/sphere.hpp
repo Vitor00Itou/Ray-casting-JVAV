@@ -15,7 +15,7 @@ struct Sphere {
 
     Sphere(Vec3 c, float r) : center(c), radius(r) { }
     Sphere(Vec3 c, float r, Color color) : center(c), radius(r), color(color) {
-        texture = Texture(color, 1, 1);
+        texture = Texture(color);
     }
     Sphere(Vec3 c, float r, const char* textureName) : center(c), radius(r) {
         texture = Texture(textureName);

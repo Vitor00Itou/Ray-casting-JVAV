@@ -4,14 +4,9 @@
 #include <algorithm>
 
 #define STB_IMAGE_IMPLEMENTATION
+
 #include "stb_image.h"
-
-struct Color {
-    float r, g, b;
-
-    Color() : r(1.0), g(1.0), b(1.0) {}
-    Color(float r, float g, float b) : r(r), g(g), b(b) {}
-};
+#include "color.hpp"
 
 struct Texture {
     int width;
@@ -19,9 +14,7 @@ struct Texture {
     int channels;
     unsigned char* data;
 
-	Texture () {
-        // throw std::runtime_error("No image or color specified");
-	}
+	Texture () {}
 
     Texture (const char* filename) {
         data = stbi_load(filename, &width, &height, &channels, 0);
@@ -31,7 +24,9 @@ struct Texture {
     }
 
 	// Construtor de textura sólida
-    Texture (Color color, int w, int h) : width(w), height(h), channels(3) {
+    Texture (Color color) : channels(3) {
+		width = 1;
+		height = 1;
         data = new unsigned char[width * height * channels];
         unsigned char R = static_cast<unsigned char>(color.r * 255);
         unsigned char G = static_cast<unsigned char>(color.g * 255);
