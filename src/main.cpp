@@ -15,6 +15,7 @@ constexpr int HEIGHT = 600;
 static float xcam = 0;
 static float ycam = 0;
 static float zcam = 0;
+static float fov = 45;
 
 static bool IsRayCastingON = false;
 
@@ -41,7 +42,7 @@ void setupScene() {
         Vec3(xcam, ycam, zcam),     // posição
         Vec3(0, 0, -1),    // direção
         Vec3(0, 1, 0),     // cima
-        60.0f              // fov
+        fov              // fov
     );
 
     // Luzes zuluzes
@@ -101,6 +102,13 @@ void keyboard(unsigned char key, int x, int y) {
         case 'k':
             IsRayCastingON = !IsRayCastingON;
             break;
+
+        case ' ':  // Espaço sobe
+            camera.position.y -= 0.1f;
+            break;
+        case 'c':  // Espaço sobe
+            camera.position.y += 0.1f;
+            break;
             
     }
 
@@ -123,8 +131,8 @@ void mouseMovement(int x, int y) {
     float deltaY = centerY - y; // Inverte o Y (cima positivo)
 
     float sensitivity = 0.1f;
-    yaw += deltaX * sensitivity;
-    pitch += deltaY * sensitivity;
+    yaw -= deltaX * sensitivity;
+    pitch -= deltaY * sensitivity;
 
     if (pitch > 89.0f) pitch = 89.0f;
     if (pitch < -89.0f) pitch = -89.0f;
