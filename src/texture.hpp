@@ -24,18 +24,15 @@ struct Texture {
     }
 
 	// Construtor de textura sólida
-    Texture (Color color) : channels(3) {
-		width = 1;
-		height = 1;
-        data = new unsigned char[width * height * channels];
+    Texture (Color color) : width(1), height(1), channels(3) {
+        data = new unsigned char[channels];
         unsigned char R = static_cast<unsigned char>(color.r * 255);
         unsigned char G = static_cast<unsigned char>(color.g * 255);
         unsigned char B = static_cast<unsigned char>(color.b * 255);
-        for (int i = 0; i < width * height; ++i) {
-            data[i * 3 + 0] = R;
-            data[i * 3 + 1] = G;
-            data[i * 3 + 2] = B;
-        }
+        data[0] = R;
+        data[1] = G;
+        data[2] = B;
+
     }
 
     // retorna cor normalizada (float entre 0.0 e 1.0)

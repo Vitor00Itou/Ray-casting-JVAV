@@ -29,3 +29,10 @@ run: all
 # Limpeza
 clean:
 	rm -rf $(BUILD_DIR)
+
+clean_run:
+	rm -rf $(BUILD_DIR)
+	./$(BIN)
+
+# Recompilar e rodar do zero
+rebuild: clean all run
