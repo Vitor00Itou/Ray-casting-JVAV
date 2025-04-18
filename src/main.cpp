@@ -2,6 +2,7 @@
 #include "ray_object_renderer.hpp"
 #include "scene.hpp"
 #include "sphere.hpp"
+#include "plane.hpp"
 #include "camera.hpp"
 
 #include <GL/glut.h>
@@ -58,6 +59,10 @@ void setupScene() {
     scene.objects.push_back(Sphere(Vec3(0, 0, -5), 1.0f, "assets/earth.png"));
     scene.objects.push_back(Sphere(Vec3(-2, 0, -6), 1.0f, Color(0.0, 1.0, 0.0)));
     scene.objects.push_back(Sphere(Vec3(2, 1, -7), 1.0f, Color(0.0, 1.0, 1.0)));
+
+    // Adiciona planos à cena
+    //scene.planes.push_back(Plane(Vec3(0,1,0), Vec3(0,1,0), "assets/earth.png"));
+    scene.planes.push_back(Plane(Vec3(0,1,0), Vec3(0,1,0)));
 }
 
 void display() {
