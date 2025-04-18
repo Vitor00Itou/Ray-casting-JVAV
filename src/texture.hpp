@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <algorithm>
 
-#define STD_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 struct Color {
