@@ -3,7 +3,8 @@
 #include <stdexcept>
 #include <algorithm>
 
-#include "../lib/stb_image.h"
+#define STD_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 struct Color {
     float r, g, b;
@@ -19,16 +20,13 @@ struct Texture {
     unsigned char* data;
 
 	Texture () {
-        throw std::runtime_error("No image or color specified");
+        // throw std::runtime_error("No image or color specified");
 	}
 
     Texture (const char* filename) {
-        stbi_set_flip_vertically_on_load(true);
         data = stbi_load(filename, &width, &height, &channels, 0);
         if (!data) {
-			char* error;
-			sprintf(error, "Error while loading image: '%s'", filename);
-            throw std::runtime_error(error);
+            throw std::runtime_error("Error while loading image");
         }
     }
 
@@ -45,18 +43,11 @@ struct Texture {
         }
     }
 
-    ~Texture () {
-        stbi_image_free(data);
-    }
-
     // retorna cor normalizada (float entre 0.0 e 1.0)
 	// 'u' e 'v' são coordenadas normalizadas em relação a superficie do objeto
-    Color getColorFromImgCoordinates (float u, float v) const {
-        int x = std::clamp(int(u * width), 0, width - 1);
-        int y = std::clamp(int(v * height), 0, height - 1);
-		if (x > width || y > height) {
-			throw std::runtime_error("Image coordinates greater than image limits");
-		}
+    Color getColorFromImgCoordinates (SurfaceCoord surfaceCoord) const {
+        int x = std::clamp(int(surfaceCoord.u * width), 0, width - 1);
+        int y = std::clamp(int(surfaceCoord.v * height), 0, height - 1);
         int index = (y * width + x) * channels;
         float r = data[index]     / 255.0f;
         float g = data[index + 1] / 255.0f;

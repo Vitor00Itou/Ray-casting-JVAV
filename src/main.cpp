@@ -54,7 +54,7 @@ void setupScene() {
 
     // Adiciona esferas à cena
     //scene.objects.push_back(Sphere(lightPos, 1.0));
-    scene.objects.push_back(Sphere(Vec3(0, 3, -5), 1.0f, Color(1.0, 0.0, 0.0)));
+    scene.objects.push_back(Sphere(Vec3(0, 3, -5), 1.0f, "assets/earth.png"));
     scene.objects.push_back(Sphere(Vec3(0, 0, -5), 1.0f, Color(1.0, 0.0, 0.0)));
     scene.objects.push_back(Sphere(Vec3(-2, 0, -6), 1.0f, Color(0.0, 1.0, 0.0)));
     scene.objects.push_back(Sphere(Vec3(2, 1, -7), 1.0f, Color(0.0, 1.0, 1.0)));

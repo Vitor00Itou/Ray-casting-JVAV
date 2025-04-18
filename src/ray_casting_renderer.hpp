@@ -36,7 +36,7 @@ struct RayCastingRenderer {
                         float cosAngNormalLight = hit.normal.dot(lightDir);
                         
                         // Calcula a intensidade da luz a ser exibida
-                        color = obj.color;
+                        color = obj.texture.getColorFromImgCoordinates(hit.surfaceCoord);
                         color.b *= cosAngNormalLight * light.intensity;
                         color.r *= cosAngNormalLight * light.intensity;
                         color.g *= cosAngNormalLight * light.intensity;

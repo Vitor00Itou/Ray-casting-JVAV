@@ -2,16 +2,10 @@
 
 #include <optional>
 
-#include "vec3.hpp"
+#include "hitinfo.hpp"
 #include "ray.hpp"
 #include "texture.hpp"
-
-struct HitInfo {
-    float t;
-    Vec3 point;
-    Vec3 normal;
-    bool hasHit;
-};
+#include <cmath>
 
 struct Sphere {
     Vec3 center;
@@ -40,6 +34,10 @@ struct Sphere {
 
         Vec3 point = ray.origin + ray.direction * t;
         Vec3 normal = (point - center).normalize();
-        return HitInfo{t, point, normal, true};
+
+        // Coordenadas normalizdas NA SUPERFICIE do objeto
+        float u = 0.5 + atan2(normal.z, normal.x) / (2 * M_PI);
+        float v = 0.5 - asin(normal.y) / M_PI;
+        return HitInfo{t, point, normal, SurfaceCoord{u, v}, true};
     }
 };
