@@ -8,11 +8,12 @@
 #include "texture.hpp"
 #include <cmath>
 
-struct Sphere : public Object{
+struct Sphere : public Object {
     Vec3 center;
     float radius;
     Color color;
     Texture texture;
+    bool _isEmitter = false;
 
     Color getColor(const HitInfo& hit) const override {
         return texture.getColorFromImgCoordinates(hit.surfaceCoord);
@@ -24,7 +25,16 @@ struct Sphere : public Object{
     Sphere(Vec3 c, float r, Color color) : center(c), radius(r), color(color) {
         texture = Texture(color);
     }
+    Sphere(Vec3 c, float r, Color color, bool isEmitter) : center(c), radius(r), color(color), _isEmitter(isEmitter) {
+        texture = Texture(color);
+    }
     Sphere(Vec3 c, float r, const char* textureName) : center(c), radius(r) {
+        texture = Texture(textureName);
+    }
+    Sphere(Vec3 c, float r, const char* textureName, bool isEmitter) : center(c), radius(r), _isEmitter(isEmitter) {
+        texture = Texture(textureName);
+    }
+    Sphere(Vec3 c, float r, Color color, const char* textureName, bool isEmitter) : center(c), radius(r), color(color), _isEmitter(isEmitter) {
         texture = Texture(textureName);
     }
 
@@ -46,5 +56,17 @@ struct Sphere : public Object{
         float u = 0.5 + atan2(normal.z, normal.x) / (2 * M_PI);
         float v = 0.5 - asin(normal.y) / M_PI;
         return HitInfo{t, point, normal, SurfaceCoord{u, v}, true};
+    }
+
+    bool isEmitter() const override {
+        return _isEmitter;
+    }
+
+    Vec3 getLightDir(const HitInfo& hit){
+		return (center - hit.point).normalize();
+	}
+
+    Color getIntensity() const {
+        return color;
     }
 };

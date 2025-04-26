@@ -39,6 +39,9 @@ struct RayCastingRenderer {
                         closestT = hit.t;
 
                         Color intensityAccum(0.0, 0.0, 0.0);
+                        if (obj->isEmitter()) {
+                            intensityAccum = obj->getIntensity();
+                        }
 
                         for(const auto& light : LightSources){
                             // Acha o cosseno do angulo entre a luz e a normal
@@ -60,9 +63,14 @@ struct RayCastingRenderer {
                     
                                 bool inShadow = false;
     
-                                // Checa sombra com esferas
+                                // Checa sombra com objetos
                                 for (const auto& otherObj : scene.objects) {
-                                    if (&otherObj == &obj) continue; // Ignora o próprio objeto
+                                    if (otherObj == obj) {
+                                        continue; // Ignora o próprio objeto
+                                    }
+                                    if (otherObj == light) {
+                                        continue; // Ignora a superfície do objeto luminoso
+                                    }
                                     if (otherObj->intersect(shadowRay).hasHit) {
                                         inShadow = true;
                                         break;
@@ -79,7 +87,6 @@ struct RayCastingRenderer {
                             intensityAccum.g += hitLightIntensity.g;
                             intensityAccum.b += hitLightIntensity.b;
 
-
                         }
                         intensityAccum.r = std::clamp(intensityAccum.r, 0.0f, 1.0f);
                         intensityAccum.g = std::clamp(intensityAccum.g, 0.0f, 1.0f);
@@ -89,10 +96,8 @@ struct RayCastingRenderer {
                         color.r = obj->getColor(hit).r * intensityAccum.r;
                         color.g = obj->getColor(hit).g * intensityAccum.g;
                         color.b = obj->getColor(hit).b * intensityAccum.b;
-                        
                     }
                 }
-
 
                 int i = (y * width + x) * 3;
                 framebuffer[i] = (unsigned char)(color.r * 255);

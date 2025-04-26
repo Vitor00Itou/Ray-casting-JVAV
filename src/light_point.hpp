@@ -2,7 +2,7 @@
 #include "vec3.hpp"
 #include "object.hpp"
 
-struct LightPoint : public Object{
+struct LightPoint : public Object {
 	Vec3 position;
 	Color lightColor;
 

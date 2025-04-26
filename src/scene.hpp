@@ -5,7 +5,8 @@
 #include "light_point.hpp"
 #include "object.hpp"
 #include <vector>
-#include <memory> 
+#include <memory>
+#include <iostream> 
 
 struct Scene {
     std::vector<Object*> objects;
@@ -13,7 +14,9 @@ struct Scene {
     std::vector<Object*> getEmitters() const {
         std::vector<Object*> emitters;
         for (auto& obj : objects) {
-            if (obj->isEmitter()) emitters.push_back(obj);
+            if (obj->isEmitter()) {
+                emitters.push_back(obj);
+            }
         }
         return emitters;
     }
