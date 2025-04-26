@@ -49,10 +49,10 @@ void setupScene() {
 
     // Luzes zuluzes
     Vec3 lightPos(2, 7, -5);
-    scene.lightSources.push_back(Light(
-        lightPos,
-        1.0
-    ));
+    scene.objects.push_back(new LightPoint(lightPos, Color(0,0,1)));
+    scene.objects.push_back(new LightPoint(lightPos + Vec3(0, 0, -5), Color(0,1,0)));
+    scene.objects.push_back(new LightPoint(lightPos + Vec3(0, 0, 5), Color(1,0,0)));
+
 
     // Adiciona esferas à cena
     scene.objects.push_back(new Sphere(Vec3(2, 2, -5), 1.0));
@@ -63,7 +63,7 @@ void setupScene() {
     scene.objects.push_back(new Sphere(Vec3(2, 1, -7), 1.0f, "assets/uranus.jpg"));
 
     // Adiciona planos à cena
-    scene.objects.push_back(new Plane(Vec3(0,1,0), Vec3(0,1,0), "assets/earth albedo.jpg"));
+    //scene.objects.push_back(new Plane(Vec3(0,1,0), Vec3(0,1,0), "assets/earth albedo.jpg"));
     scene.objects.push_back(new Plane(Vec3(0,-2,0), Vec3(0,1,0)));
 }
 
