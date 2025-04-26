@@ -31,9 +31,9 @@ struct RayCastingRenderer {
 
 
 
-                // Testando esferas
+                // Verifica objetos
                 for (const auto& obj : scene.objects) {
-                    auto hit = obj.intersect(ray);
+                    auto hit = obj->intersect(ray);
                     if (hit.hasHit && hit.t < closestT) {
                         // Novo menor
                         closestT = hit.t;
@@ -43,7 +43,7 @@ struct RayCastingRenderer {
                         float cosAngNormalLight = hit.normal.dot(lightDir);
                         
                         // Calcula a intensidade da luz a ser exibida
-                        color = obj.texture.getColorFromImgCoordinates(hit.surfaceCoord);
+                        color = obj->getColor(hit);
                         color.b *= cosAngNormalLight * light.intensity;
                         color.r *= cosAngNormalLight * light.intensity;
                         color.g *= cosAngNormalLight * light.intensity;
@@ -63,68 +63,7 @@ struct RayCastingRenderer {
                             // Checa sombra com esferas
                             for (const auto& otherObj : scene.objects) {
                                 if (&otherObj == &obj) continue; // Ignora o próprio objeto
-                                if (otherObj.intersect(shadowRay).hasHit) {
-                                    inShadow = true;
-                                    break;
-                                }
-                            }
-
-                            // Checa sombra com planos
-                            for (const auto& otherObj : scene.planes) {
-                                if (otherObj.intersect(shadowRay).hasHit) {
-                                    inShadow = true;
-                                    break;
-                                }
-                            }
-
-                            if (inShadow) {
-                                color = Color(0, 0, 0); // Sombra
-                            }
-                        }
-                    }
-                }
-
-                // Testando planos
-                for (const auto& obj : scene.planes) {
-                    auto hit = obj.intersect(ray);
-                    if (hit.hasHit && hit.t < closestT) {
-                        // Novo menor
-                        closestT = hit.t;
-                        
-                        // Acha o cosseno do angulo entre a luz e a normal
-                        Vec3 lightDir = (light.position - hit.point).normalize();
-                        float cosAngNormalLight = hit.normal.dot(lightDir);
-                        
-                        // Calcula a intensidade da luz a ser exibida
-                        color = obj.texture.getColorFromImgCoordinates(hit.surfaceCoord);
-                        color.b *= cosAngNormalLight * light.intensity;
-                        color.r *= cosAngNormalLight * light.intensity;
-                        color.g *= cosAngNormalLight * light.intensity;
-
-                        // Se a normal está apontando PARA TRÁS da luz, está em sombra
-                        if (cosAngNormalLight <= 0.0f) {
-                            color = Color(0, 0, 0); // Escuro total (backface)
-                        }
-                        // Caso contrário, testa sombra normalmente
-                        else {
-                            Vec3 shadowRayOrigin = hit.point + (hit.normal * 0.01f); // Bias
-                            Vec3 shadowRayDir = lightDir; // Já normalizada
-                            shadowRay = Ray(shadowRayOrigin, shadowRayDir);
-                            
-                            bool inShadow = false;
-
-                            // Checa sombra com outros planos
-                            for (const auto& otherObj : scene.planes) {
-                                if (&otherObj == &obj) continue; // Ignora o próprio objeto
-                                if (otherObj.intersect(shadowRay).hasHit) {
-                                    inShadow = true;
-                                    break;
-                                }
-                            }
-
-                            // Checa sombra com esferas
-                            for (const auto& otherObj : scene.objects) {
-                                if (otherObj.intersect(shadowRay).hasHit) {
+                                if (otherObj->intersect(shadowRay).hasHit) {
                                     inShadow = true;
                                     break;
                                 }

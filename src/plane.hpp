@@ -1,16 +1,21 @@
 #pragma once
 
 #include <cmath>
+#include "object.hpp"
 #include "vec3.hpp"
 #include "ray.hpp"
 #include "hitinfo.hpp"
 #include "texture.hpp"
 
-struct Plane {
+struct Plane : public Object{
     Vec3 point;      // Um ponto qualquer no plano
     Vec3 normal;     // A normal do plano (normalizada)
     Color color;     // Cor base
     Texture texture; // Textura
+
+    Color getColor(const HitInfo& hit) const override {
+        return texture.getColorFromImgCoordinates(hit.surfaceCoord);
+    }
 
     Plane(Vec3 p, Vec3 n) : point(p), normal(n.normalize()) {
         texture = Texture(Color(1.0f, 1.0f, 1.0f));

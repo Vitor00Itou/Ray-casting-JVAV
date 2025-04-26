@@ -2,18 +2,25 @@
 
 #include <optional>
 
+#include "object.hpp"
 #include "hitinfo.hpp"
 #include "ray.hpp"
 #include "texture.hpp"
 #include <cmath>
 
-struct Sphere {
+struct Sphere : public Object{
     Vec3 center;
     float radius;
     Color color;
     Texture texture;
 
-    Sphere(Vec3 c, float r) : center(c), radius(r) { }
+    Color getColor(const HitInfo& hit) const override {
+        return texture.getColorFromImgCoordinates(hit.surfaceCoord);
+    }
+
+    Sphere(Vec3 c, float r) : center(c), radius(r) { 
+        texture = Texture(Color(1.0f, 1.0f, 1.0f));
+    }
     Sphere(Vec3 c, float r, Color color) : center(c), radius(r), color(color) {
         texture = Texture(color);
     }
