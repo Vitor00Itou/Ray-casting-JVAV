@@ -74,9 +74,9 @@ void setupScene() {
 
 
     // Adicionar paralelipipedos à cena
-    scene.objects.push_back(new Box(Vec3(-1, 2, -1), Vec3(1, 4, 1), Color(1, 1, 1), "assets/Jupitar.jpg", true));
+    scene.objects.push_back(new Box(Vec3(-1, 2, -20), Vec3(1, 4, -18), Color(1, 1, 1), "assets/Jupitar.jpg", true));
     //scene.objects.push_back(new Box(Vec3(-1, 0, 6), Vec3(1, 2, 8), "assets/Jupitar.jpg"));
-    scene.objects.push_back(new Box(Vec3(-1, 0, 10), Vec3(1, 2, 11), true));
+    scene.objects.push_back(new Box(Vec3(-1, 0, 2), Vec3(1, 2, 0), true));
     scene.objects.push_back(new Box(Vec3(-1, 0, -10), Vec3(1, 2, -11), true));
 
 
@@ -87,8 +87,8 @@ void setupScene() {
     scene.objects.push_back(glassPlane);
 
     Sphere* glassSphere = new Sphere(Vec3(0,0,-5), 1.0f, Color(1,1,1));
-    glassSphere->transparency = 0.7f;
-    glassSphere->refractiveIndex = 1.1f;
+    glassSphere->transparency = 1.0f;
+    glassSphere->refractiveIndex = 0.9f;
     scene.objects.push_back(glassSphere);
 
 }

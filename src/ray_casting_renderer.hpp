@@ -6,7 +6,7 @@
 
 int maxRecursionDepth = 5;
 int recursionDepth = 0;
-int reflectionCoefficient = 1;
+float reflectionCoefficient = 0.5;
 
 struct RayCastingRenderer {
     int width, height;
@@ -164,8 +164,10 @@ struct RayCastingRenderer {
                         recursionDepth++;
                         color = color * (1.0f - reflectionCoefficient) +  castRay(reflectRay, scene, LightSources) * reflectionCoefficient;
                     }
+                    
                 // Se o objeto for transparente, refratar o raio
-                }else if (obj->isTransparent()) {
+                } 
+                if (obj->isTransparent()) {
                     float eta = obj->getRefractiveIndex(); 
                     Vec3 refractDir = refract(rayCasted.direction, hit.normal, eta).normalize();
                     Ray refractRay(hit.point - hit.normal * 0.01f, refractDir); // pequeno bias para evitar reinterseção
@@ -185,6 +187,9 @@ struct RayCastingRenderer {
     }
 
     Vec3 refract(const Vec3& incident, const Vec3& normal, float eta) {
+        if (fabs(eta - 1.0f) < 1e-6f) {
+            return incident; // nada muda
+        }
         float cosi = std::clamp(incident.dot(normal), -1.0f, 1.0f);
         float etai = 1.0f, etat = eta;
         Vec3 n = normal;
