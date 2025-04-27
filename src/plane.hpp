@@ -29,11 +29,16 @@ struct Plane : public Object{
         texture = Texture(textureName);
     }
 
+    Vec3 getCenter() const override{
+        return point;
+    } ;
+
+
     HitInfo intersect(const Ray& ray) const {
         float denom = normal.dot(ray.direction);
         if (std::abs(denom) > 1e-6) {
             float t = (point - ray.origin).dot(normal) / denom;
-            if (t >= 0) {
+            if (t >= 0 ) {
                 Vec3 hitPoint = ray.origin + ray.direction * t;
                 Vec3 adjustedNormal = normal;
     

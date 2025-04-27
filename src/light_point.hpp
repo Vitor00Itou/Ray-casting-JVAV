@@ -17,4 +17,8 @@ struct LightPoint : public Object {
 	Vec3 getLightDir(const HitInfo& hit){
 		return (position - hit.point).normalize();
 	}
+
+	Vec3 getCenter() const {
+		return position;
+	}
 };

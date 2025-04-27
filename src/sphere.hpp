@@ -19,6 +19,10 @@ struct Sphere : public Object {
         return texture.getColorFromImgCoordinates(hit.surfaceCoord);
     }
 
+    Vec3 getCenter() const override {
+        return center;
+    } ;
+
     Sphere(Vec3 c, float r) : center(c), radius(r) { 
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }

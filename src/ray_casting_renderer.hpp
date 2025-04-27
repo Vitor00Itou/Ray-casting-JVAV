@@ -60,6 +60,9 @@ struct RayCastingRenderer {
                                 Vec3 shadowRayOrigin = hit.point + (hit.normal * 0.01f); // Bias
                                 Vec3 shadowRayDir = lightDir; // Já normalizada
                                 shadowRay = Ray(shadowRayOrigin, shadowRayDir);
+
+                                //Acha a distância entre o ponto e a luz
+                                float maxDistance = (light->getCenter() - shadowRayOrigin).length();
                     
                                 bool inShadow = false;
     
@@ -71,7 +74,11 @@ struct RayCastingRenderer {
                                     if (otherObj == light) {
                                         continue; // Ignora a superfície do objeto luminoso
                                     }
-                                    if (otherObj->intersect(shadowRay).hasHit) {
+                                    
+                                    //Calcula a interceção do objeto com o shadowRay
+                                    HitInfo shadowHit = otherObj->intersect(shadowRay);
+
+                                    if (shadowHit.hasHit && shadowHit.t < maxDistance) {
                                         inShadow = true;
                                         break;
                                     }

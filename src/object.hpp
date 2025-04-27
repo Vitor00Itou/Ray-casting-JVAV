@@ -7,6 +7,7 @@
 
 struct Object {
     virtual HitInfo intersect(const Ray& ray) const = 0;
+    virtual Vec3 getCenter() const = 0;
     virtual ~Object() {}
     
     virtual Color getColor(const HitInfo& hit) const { return Color(0, 0, 0); };

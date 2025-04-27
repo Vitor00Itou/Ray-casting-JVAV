@@ -10,6 +10,7 @@ struct Vec3 {
     Vec3 operator+(const Vec3& v) const { return Vec3(x + v.x, y + v.y, z + v.z); }
     Vec3 operator-(const Vec3& v) const { return Vec3(x - v.x, y - v.y, z - v.z); }
     Vec3 operator*(float s) const { return Vec3(x * s, y * s, z * s); }
+    Vec3 operator/(float s) const { return Vec3(x / s, y / s, z / s); }
     
     float angle(Vec3& v1, Vec3& v2) {
         float dot = v1.dot(v2);
@@ -32,5 +33,9 @@ struct Vec3 {
             z*v.x - x*v.z,
             x*v.y - y*v.x
         );
+    }
+
+    float length() const {
+        return std::sqrt(x*x + y*y + z*z);
     }
 };

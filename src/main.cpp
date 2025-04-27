@@ -4,6 +4,7 @@
 #include "sphere.hpp"
 #include "plane.hpp"
 #include "camera.hpp"
+#include "box.hpp"
 #include <iostream>
 
 #include <GL/glut.h>
@@ -55,7 +56,8 @@ void setupScene() {
 
     // Adiciona esferas à cena
     // scene.objects.push_back(new Sphere(Vec3(2, 2, -5), 1.0));
-    scene.objects.push_back(new Sphere(Vec3(2, 2, -5), 1.0f, Color(1, 1, 0.5), "assets/sol.jpg", true));
+    //scene.objects.push_back(new Sphere(Vec3(2, 2, -5), 1.0f, Color(1, 1, 0.5), "assets/sol.jpg", true));
+    //scene.objects.push_back(new Sphere(Vec3(2, 2, 5), 1.0f, Color(1, 1, 1), "assets/sol.jpg", true));
     scene.objects.push_back(new Sphere(Vec3(0, -3, -5), 1.0f, "assets/uranus.jpg"));
     scene.objects.push_back(new Sphere(Vec3(0, 0, -5), 1.0f, "assets/earth albedo.jpg"));
     scene.objects.push_back(new Sphere(Vec3(-2, 0, -6), 1.0f, "assets/Jupitar.jpg"));
@@ -64,6 +66,11 @@ void setupScene() {
     // Adiciona planos à cena
     //scene.objects.push_back(new Plane(Vec3(0,1,0), Vec3(0,1,0), "assets/earth albedo.jpg"));
     scene.objects.push_back(new Plane(Vec3(0,-2,0), Vec3(0,1,0)));
+
+
+    // Adicionar paralelipipedos à cena
+    scene.objects.push_back(new Box(Vec3(-1, 0, -1), Vec3(1, 2, 1), Color(0, 1, 1), true));
+
 }
 
 void display() {
@@ -115,7 +122,7 @@ void keyboard(unsigned char key, int x, int y) {
         case 'c':  // Espaço sobe
             camera.position.y -= 0.1f;
             break;
-            
+
     }
 
     glutPostRedisplay();
