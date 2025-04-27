@@ -6,6 +6,7 @@
 #include "camera.hpp"
 #include "box.hpp"
 #include <iostream>
+#include <chrono>
 
 #include <GL/glut.h>
 #include <vector>
@@ -20,8 +21,9 @@ static float ycam = 0;
 static float zcam = 0;
 static float fov = 45;
 
+std::chrono::high_resolution_clock::time_point start, end;
 static bool IsRayCastingON = false;
-
+static bool monitoringTime = false;
 
 // Variáveis para movimentação da camera
 static float yaw = -90.0f;   // Ângulo horizontal (inicia virado para -Z)
@@ -76,6 +78,7 @@ void setupScene() {
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     
+    start = std::chrono::high_resolution_clock::now();
     // Renderiza a imagem
     if (IsRayCastingON)
     {
@@ -84,6 +87,12 @@ void display() {
     }else{
         rayObjectRenderer.render(scene, camera);
         glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, rayObjectRenderer.getFramebuffer().data());
+    }
+
+    end = std::chrono::high_resolution_clock::now();
+    if (monitoringTime) {
+        std::chrono::duration<double, std::milli> duration = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(end - start);
+        std::cout << "Tempo decorrido: " << duration.count() << " ms" << std::endl;
     }
 
     glutSwapBuffers();
@@ -114,6 +123,10 @@ void keyboard(unsigned char key, int x, int y) {
         }
         case 'k':
             IsRayCastingON = !IsRayCastingON;
+            break;
+
+        case 't':
+            monitoringTime = !monitoringTime;
             break;
 
         case ' ':  // Espaço sobe

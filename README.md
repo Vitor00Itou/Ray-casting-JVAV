@@ -87,7 +87,7 @@ scene.lightSources.push_back(Light(
 
 ---
 
-## 🎮 Controles (Movimentação da Câmera)
+## 🎮 Controles
 
 - **W / S** — Movimentar para frente/trás
 - **A / D** — Movimentar para esquerda/direita
@@ -95,6 +95,8 @@ scene.lightSources.push_back(Light(
 - **Space** — Subir
 - **C** — descer
 - **ESC** — Encerrar o programa
+- **K** — Ativar/desativar o **ray casting**
+- **T** — Ativar/desativar monitoramento de tempo de renderização por frame
 
 ---
 
