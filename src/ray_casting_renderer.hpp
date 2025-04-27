@@ -4,9 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-int maxRecursionDepth = 5;
-int recursionDepth = 0;
-float reflectionCoefficient = 0.5;
+float reflectionCoefficient = 1;
 
 struct RayCastingRenderer {
     int width, height;
@@ -19,7 +17,7 @@ struct RayCastingRenderer {
         return incident - normal * 2.0f * incident.dot(normal);
     }
 
-    void render(const Scene& scene, const Camera& camera) {
+    void render(const Scene& scene, const Camera& camera, int maxRecursionDepth) {
         std::vector<Object*> LightSources = scene.getEmitters();
 
         for (int y = 0; y < height; ++y) {
@@ -28,7 +26,7 @@ struct RayCastingRenderer {
                 float v = (y + 0.5f) / height;
                 Ray ray = camera.getRay(u, v);
 
-                Color color = castRay(ray, scene, LightSources);
+                Color color = castRay(ray, scene, LightSources, 0, maxRecursionDepth);
 
                 int i = (y * width + x) * 3;
                 framebuffer[i] = (unsigned char)(color.r * 255);
@@ -38,7 +36,7 @@ struct RayCastingRenderer {
         }
     }
 
-    Color castRay(const Ray& rayCasted, const Scene& scene, const std::vector<Object*>& LightSources) {
+    Color castRay(const Ray& rayCasted, const Scene& scene, const std::vector<Object*>& LightSources, int recursionDepth, int maxRecursionDepth) {
         Color reflectionColor(0.2f, 0.2f, 0.4f); // fundo
         Color color(0.2f, 0.2f, 0.4f); // fundo
         float closestT = std::numeric_limits<float>::max();
@@ -162,7 +160,7 @@ struct RayCastingRenderer {
 
                     if(recursionDepth < maxRecursionDepth){
                         recursionDepth++;
-                        color = color * (1.0f - reflectionCoefficient) +  castRay(reflectRay, scene, LightSources) * reflectionCoefficient;
+                        color = color * (1.0f - reflectionCoefficient) +  castRay(reflectRay, scene, LightSources, recursionDepth, maxRecursionDepth) * reflectionCoefficient;
                     }
                     
                 // Se o objeto for transparente, refratar o raio
@@ -174,7 +172,7 @@ struct RayCastingRenderer {
                 
                     if (recursionDepth < maxRecursionDepth) {
                         recursionDepth++;
-                        Color transmissionColor = castRay(refractRay, scene, LightSources);
+                        Color transmissionColor = castRay(refractRay, scene, LightSources, recursionDepth, maxRecursionDepth);
                 
                         float transparency = obj->getTransparency(); // tipo 0.8 para vidro quase invisível
                         color = color * (1.0f - transparency) + transmissionColor * transparency;
@@ -182,7 +180,6 @@ struct RayCastingRenderer {
                 }
             }
         }
-        recursionDepth = 0;
         return color;
     }
 

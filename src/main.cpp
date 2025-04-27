@@ -34,6 +34,7 @@ int centerX = windowWidth / 2;
 int centerY = windowHeight / 2;
 bool justWarped = false;
 
+int maxRecursionDepth = 10;
 
 
 RayCastingRenderer rayCastingRenderer(WIDTH, HEIGHT);
@@ -74,9 +75,9 @@ void setupScene() {
 
 
     // Adicionar paralelipipedos à cena
-    scene.objects.push_back(new Box(Vec3(-1, 2, -20), Vec3(1, 4, -18), Color(1, 1, 1), "assets/Jupitar.jpg", true));
+    scene.objects.push_back(new Box(Vec3(-1, 2, -2), Vec3(1, 4, 0), Color(1, 1, 1), "assets/Jupitar.jpg", true));
     //scene.objects.push_back(new Box(Vec3(-1, 0, 6), Vec3(1, 2, 8), "assets/Jupitar.jpg"));
-    scene.objects.push_back(new Box(Vec3(-1, 0, 2), Vec3(1, 2, 0), true));
+    scene.objects.push_back(new Box(Vec3(-1, 0, 10), Vec3(1, 2, 11), true));
     scene.objects.push_back(new Box(Vec3(-1, 0, -10), Vec3(1, 2, -11), true));
 
 
@@ -87,8 +88,8 @@ void setupScene() {
     scene.objects.push_back(glassPlane);
 
     Sphere* glassSphere = new Sphere(Vec3(0,0,-5), 1.0f, Color(1,1,1));
-    glassSphere->transparency = 1.0f;
-    glassSphere->refractiveIndex = 0.9f;
+    glassSphere->transparency = 0.7f;
+    glassSphere->refractiveIndex = 1.0f;
     scene.objects.push_back(glassSphere);
 
 }
@@ -100,7 +101,7 @@ void display() {
     // Renderiza a imagem
     if (IsRayCastingON)
     {
-        rayCastingRenderer.render(scene, camera);
+        rayCastingRenderer.render(scene, camera, maxRecursionDepth);
         glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, rayCastingRenderer.getFramebuffer().data());
     }else{
         rayObjectRenderer.render(scene, camera);
@@ -152,6 +153,18 @@ void keyboard(unsigned char key, int x, int y) {
             break;
         case 'c':  // Espaço sobe
             camera.position.y -= 0.1f;
+            break;
+
+        case 'r':
+            if (maxRecursionDepth)
+            {
+                maxRecursionDepth--;
+            }
+            
+            break;
+
+        case 'R':
+            maxRecursionDepth++;
             break;
 
     }

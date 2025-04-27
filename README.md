@@ -100,7 +100,7 @@ scene.lightSources.push_back(Light(
 - **ESC** — Encerrar o programa
 - **K** — Ativar/desativar o **ray casting**
 - **T** — Ativar/desativar monitoramento de tempo de renderização por frame
-
+- **K/k** — Aumentar/Diminutir quantidade máxima de recastings de raios
 ---
 
 ## 🎯 Trabalhos Futuros
