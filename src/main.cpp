@@ -62,13 +62,14 @@ void setupScene() {
     //scene.objects.push_back(new Sphere(Vec3(2, 2, 5), 1.0f, Color(1, 1, 1), "assets/sol.jpg", true));
     //scene.objects.push_back(new Sphere(Vec3(0, -3, -5), 1.0f, "assets/uranus.jpg"));
     scene.objects.push_back(new Sphere(Vec3(-1, 1, 13), 1.0f, "assets/uranus.jpg"));
-    scene.objects.push_back(new Sphere(Vec3(0, 0, -5), 1.0f, "assets/earth albedo.jpg"));
+    //scene.objects.push_back(new Sphere(Vec3(0, 0, -5), 1.0f, "assets/earth albedo.jpg"));
     scene.objects.push_back(new Sphere(Vec3(-2, 0, -6), 1.0f, "assets/Jupitar.jpg"));
     //scene.objects.push_back(new Sphere(Vec3(2, 1, -7), 1.0f, "assets/uranus.jpg"));
     scene.objects.push_back(new Sphere(Vec3(2, 1, -7), 1.0f, true));
 
     // Adiciona planos à cena
     //scene.objects.push_back(new Plane(Vec3(0,1,0), Vec3(0,1,0), "assets/earth albedo.jpg"));
+    //scene.objects.push_back(new Plane(Vec3(0,-2,0), Vec3(0,1,0),"assets/earth albedo.jpg"));
     scene.objects.push_back(new Plane(Vec3(0,-2,0), Vec3(0,1,0)));
 
 
@@ -77,6 +78,19 @@ void setupScene() {
     //scene.objects.push_back(new Box(Vec3(-1, 0, 6), Vec3(1, 2, 8), "assets/Jupitar.jpg"));
     scene.objects.push_back(new Box(Vec3(-1, 0, 10), Vec3(1, 2, 11), true));
     scene.objects.push_back(new Box(Vec3(-1, 0, -10), Vec3(1, 2, -11), true));
+
+
+    Box* glassPlane = new Box(Vec3(-3, 0, -1), Vec3(-2, 2, 1));
+    glassPlane->transparency = 1.0f;
+    glassPlane->refractiveIndex = 1.5f;
+    
+    scene.objects.push_back(glassPlane);
+
+    Sphere* glassSphere = new Sphere(Vec3(0,0,-5), 1.0f, Color(1,1,1));
+    glassSphere->transparency = 0.7f;
+    glassSphere->refractiveIndex = 1.1f;
+    scene.objects.push_back(glassSphere);
+
 }
 
 void display() {

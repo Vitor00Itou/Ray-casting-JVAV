@@ -13,6 +13,8 @@ struct Box : public Object {
     Texture texture;
     bool _isEmitter = false;
     bool _isMirror = false;
+    float transparency = 0.0f;      
+    float refractiveIndex = 1.0f;    
 
     Box(Vec3 minC, Vec3 maxC) : minCorner(minC), maxCorner(maxC) {
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
@@ -48,6 +50,16 @@ struct Box : public Object {
 
     bool isMirror() const override{
         return _isMirror;
+    }
+
+    bool isTransparent() const override { 
+        return transparency > 0.0f; 
+    }
+    float getTransparency() const override { 
+        return transparency; 
+    }
+    float getRefractiveIndex() const override { 
+        return refractiveIndex; 
     }
 
 

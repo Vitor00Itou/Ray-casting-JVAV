@@ -13,6 +13,8 @@ struct Plane : public Object{
     Color color;     // Cor base
     Texture texture; // Textura
     bool _isMirror = false;
+    float transparency = 0.0f;      // 0 = opaco, 1 = totalmente transparente
+    float refractiveIndex = 1.0f;    // 1.0 = ar, 1.5 = vidro, 2.4 = diamante
 
     Color getColor(const HitInfo& hit) const override {
         return texture.getColorFromImgCoordinates(hit.surfaceCoord);
@@ -67,5 +69,15 @@ struct Plane : public Object{
             }
         }
         return HitInfo{0, Vec3(), Vec3(), SurfaceCoord{0, 0}, false};
+    }
+
+    bool isTransparent() const override { 
+        return transparency > 0.0f; 
+    }
+    float getTransparency() const override { 
+        return transparency; 
+    }
+    float getRefractiveIndex() const override { 
+        return refractiveIndex; 
     }
 };

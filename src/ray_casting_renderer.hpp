@@ -79,6 +79,7 @@ struct RayCastingRenderer {
                         float maxDistance = (light->getCenter() - shadowRayOrigin).length();
             
                         bool inShadow = false;
+                        float transparencyFactor = 1.0f;
 
                         // Checa sombra com objetos
                         for (const auto& otherObj : scene.objects) {
@@ -91,12 +92,22 @@ struct RayCastingRenderer {
                             
                             //Calcula a interceção do objeto com o shadowRay
                             HitInfo shadowHit = otherObj->intersect(shadowRay);
-
+                            
+                            // Atingiu o objeto
                             if (shadowHit.hasHit && shadowHit.t < maxDistance) {
-                                inShadow = true;
-                                break;
+                                if (otherObj->isTransparent()) {
+                                    // Se o objeto for transparente, acumula a sua transparencia
+                                    transparencyFactor *= otherObj->getTransparency();
+                                    // Continua checando outros objetos
+                                }else{
+                                    inShadow = true;
+                                    break;  
+                                }
                             }
                         }
+                        #include <iostream>
+                        
+                        hitLightIntensity = hitLightIntensity*transparencyFactor;
 
                         if (inShadow) {
                             hitLightIntensity = Color(0, 0, 0); // Sombra
@@ -153,12 +164,43 @@ struct RayCastingRenderer {
                         recursionDepth++;
                         color = color * (1.0f - reflectionCoefficient) +  castRay(reflectRay, scene, LightSources) * reflectionCoefficient;
                     }
-
+                // Se o objeto for transparente, refratar o raio
+                }else if (obj->isTransparent()) {
+                    float eta = obj->getRefractiveIndex(); 
+                    Vec3 refractDir = refract(rayCasted.direction, hit.normal, eta).normalize();
+                    Ray refractRay(hit.point - hit.normal * 0.01f, refractDir); // pequeno bias para evitar reinterseção
+                
+                    if (recursionDepth < maxRecursionDepth) {
+                        recursionDepth++;
+                        Color transmissionColor = castRay(refractRay, scene, LightSources);
+                
+                        float transparency = obj->getTransparency(); // tipo 0.8 para vidro quase invisível
+                        color = color * (1.0f - transparency) + transmissionColor * transparency;
+                    }
                 }
             }
         }
         recursionDepth = 0;
         return color;
+    }
+
+    Vec3 refract(const Vec3& incident, const Vec3& normal, float eta) {
+        float cosi = std::clamp(incident.dot(normal), -1.0f, 1.0f);
+        float etai = 1.0f, etat = eta;
+        Vec3 n = normal;
+        if (cosi < 0) {
+            cosi = -cosi;
+        } else {
+            std::swap(etai, etat);
+            n = normal*-1;
+        }
+        float etaRatio = etai / etat;
+        float k = 1 - etaRatio * etaRatio * (1 - cosi * cosi);
+        if (k < 0) {
+            return reflect(incident, normal); // reflexão total interna
+        } else {
+            return incident * etaRatio + n * (etaRatio * cosi - sqrtf(k));
+        }
     }
 
     const std::vector<unsigned char>& getFramebuffer() const {
