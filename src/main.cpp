@@ -69,7 +69,7 @@ void setupScene() {
 
 
     // Adicionar paralelipipedos à cena
-    scene.objects.push_back(new Box(Vec3(-1, 0, -1), Vec3(1, 2, 1), Color(0, 1, 1), true));
+    scene.objects.push_back(new Box(Vec3(-1, 0, -1), Vec3(1, 2, 1), Color(1, 1, 1), "assets/Jupitar.jpg", true));
 
 }
 
