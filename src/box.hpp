@@ -12,8 +12,13 @@ struct Box : public Object {
     Color color;
     Texture texture;
     bool _isEmitter = false;
+    bool _isMirror = false;
 
     Box(Vec3 minC, Vec3 maxC) : minCorner(minC), maxCorner(maxC) {
+        texture = Texture(Color(1.0f, 1.0f, 1.0f));
+    }
+
+    Box(Vec3 minC, Vec3 maxC, bool isMirror) : minCorner(minC), maxCorner(maxC), _isMirror(isMirror) {
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
 
@@ -39,7 +44,11 @@ struct Box : public Object {
 
     Vec3 getCenter() const override{
         return (minCorner + maxCorner)/2;
-    } ;
+    } 
+
+    bool isMirror() const override{
+        return _isMirror;
+    }
 
 
     HitInfo intersect(const Ray& ray) const override {

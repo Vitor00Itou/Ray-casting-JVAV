@@ -45,10 +45,12 @@ make rebuild
 ## 🎨 Funcionalidades atuais
 
 - Renderização de cenas 3D usando **ray casting**.
+- Propriedades especular e difusa da luz.
 - Suporte a **esferas**, **planos** e **caixas** como objetos ou objetos emissores de luz.
 - Fontes de luz **pontuais** com diferentes intensidades e cores.
 - Câmera com movimentação básica (usando teclado/mouse).
 - Texturização de objetos (mapa de textura simples).
+- **Reflexividade** (superfícies espelhadas).
 
 ---
 
@@ -105,7 +107,6 @@ scene.lightSources.push_back(Light(
 Algumas melhorias planejadas para o projeto:
 
 - [ ] **Adicionar transparência** (materiais translúcidos, tipo vidro).
-- [ ] **Reflexividade** (superfícies espelhadas).
 - [ ] **Novos tipos de objetos** (cilindros, cones, meshes).
 - [ ] **Anti-aliasing** por amostragem múltipla (supersampling).
 - [ ] **Sistema de materiais** mais completo (brilho, rugosidade).
@@ -124,4 +125,8 @@ Este projeto é de uso livre para fins educacionais e pessoais.
 ![Esfera luminosa com textura](images/sun_light.png)
 
 ![Cubo luminoso cor sólida](images/ciano_cube.png)
+
+![Cubo luminoso cor sólida](images/mirror_surface.png)
+
+![Cubo luminoso cor sólida](images/mirror_sphere.png)
 

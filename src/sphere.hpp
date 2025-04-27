@@ -15,6 +15,7 @@ struct Sphere : public Object {
     Texture texture;
     bool _isEmitter = false;
     float specularShininess = 32;
+    bool _isMirror = false;
 
     Color getColor(const HitInfo& hit) const override {
         return texture.getColorFromImgCoordinates(hit.surfaceCoord);
@@ -28,9 +29,19 @@ struct Sphere : public Object {
         return specularShininess;
     }
 
+    bool isMirror() const override{
+        return _isMirror;
+    }
+
+
     Sphere(Vec3 c, float r) : center(c), radius(r) { 
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
+
+    Sphere(Vec3 c, float r, bool isMirror) : center(c), radius(r), _isMirror(isMirror){ 
+        texture = Texture(Color(1.0f, 1.0f, 1.0f));
+    }
+
     Sphere(Vec3 c, float r, Color color) : center(c), radius(r), color(color) {
         texture = Texture(color);
     }

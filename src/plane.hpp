@@ -12,6 +12,7 @@ struct Plane : public Object{
     Vec3 normal;     // A normal do plano (normalizada)
     Color color;     // Cor base
     Texture texture; // Textura
+    bool _isMirror = false;
 
     Color getColor(const HitInfo& hit) const override {
         return texture.getColorFromImgCoordinates(hit.surfaceCoord);
@@ -20,6 +21,11 @@ struct Plane : public Object{
     Plane(Vec3 p, Vec3 n) : point(p), normal(n.normalize()) {
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
+
+    Plane(Vec3 p, Vec3 n, bool isMirror) : point(p), normal(n.normalize()),_isMirror(isMirror) {
+        texture = Texture(Color(1.0f, 1.0f, 1.0f));
+    }
+
 
     Plane(Vec3 p, Vec3 n, Color color) : point(p), normal(n.normalize()), color(color) {
         texture = Texture(color);
@@ -32,6 +38,12 @@ struct Plane : public Object{
     Vec3 getCenter() const override{
         return point;
     } ;
+
+
+    bool isMirror() const override{
+        return _isMirror;
+    }
+
 
 
     HitInfo intersect(const Ray& ray) const {
