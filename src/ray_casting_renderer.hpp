@@ -89,6 +89,31 @@ struct RayCastingRenderer {
                                 }
                             }
 
+                            if (hitLightIntensity.r > 0.0f || hitLightIntensity.g > 0.0f || hitLightIntensity.b > 0.0f) { // só calcula especular se tiver difusa também
+                                // Direção da câmera (olho para o ponto)
+                                Vec3 viewDir = (camera.position - hit.point).normalize();
+
+                                // Vetor metade (entre direção da luz e da câmera)
+                                Vec3 halfVector = (lightDir + viewDir).normalize();
+
+                                // Produto escalar da normal com o vetor metade
+                                float cosAngNormalHalf = hit.normal.dot(halfVector);
+
+                                // Se for negativo, zero
+                                cosAngNormalHalf = std::max(0.0f, cosAngNormalHalf);
+
+                                // Coeficiente especular
+                                //float shininess = obj->getShininess(); // <- cada objeto pode ter o seu!
+                                float shininess = 32;
+                                float specularFactor = pow(cosAngNormalHalf, shininess);
+                        
+                                Color specularColor = light->getIntensity() * specularFactor;
+                        
+                                hitLightIntensity.r += specularColor.r;
+                                hitLightIntensity.g += specularColor.g;
+                                hitLightIntensity.b += specularColor.b;
+                            }
+
                             // Acumula as intensidades da luz no ponto
                             intensityAccum.r += hitLightIntensity.r;
                             intensityAccum.g += hitLightIntensity.g;

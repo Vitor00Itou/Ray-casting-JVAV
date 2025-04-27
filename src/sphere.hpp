@@ -14,6 +14,7 @@ struct Sphere : public Object {
     Color color;
     Texture texture;
     bool _isEmitter = false;
+    float specularShininess = 32;
 
     Color getColor(const HitInfo& hit) const override {
         return texture.getColorFromImgCoordinates(hit.surfaceCoord);
@@ -22,6 +23,10 @@ struct Sphere : public Object {
     Vec3 getCenter() const override {
         return center;
     } ;
+
+    float getSpecularShininess() const override {
+        return specularShininess;
+    }
 
     Sphere(Vec3 c, float r) : center(c), radius(r) { 
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
@@ -39,6 +44,9 @@ struct Sphere : public Object {
         texture = Texture(textureName);
     }
     Sphere(Vec3 c, float r, Color color, const char* textureName, bool isEmitter) : center(c), radius(r), color(color), _isEmitter(isEmitter) {
+        texture = Texture(textureName);
+    }
+    Sphere(Vec3 c, float r, Color color, const char* textureName, bool isEmitter, float specularShininess) : center(c), radius(r), color(color), _isEmitter(isEmitter), specularShininess(specularShininess) {
         texture = Texture(textureName);
     }
 
