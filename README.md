@@ -101,6 +101,7 @@ scene.lightSources.push_back(Light(
 - **K** — Ativar/desativar o **ray casting**
 - **T** — Ativar/desativar monitoramento de tempo de renderização por frame
 - **K/k** — Aumentar/Diminutir quantidade máxima de recastings de raios
+- **F/f** — Aumentar/Diminutir o fov da camera
 ---
 
 ## 🎯 Trabalhos Futuros

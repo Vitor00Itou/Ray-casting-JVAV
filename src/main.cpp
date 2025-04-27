@@ -88,7 +88,7 @@ void setupScene() {
     scene.objects.push_back(glassPlane);
 
     Sphere* glassSphere = new Sphere(Vec3(0,0,-5), 1.0f, Color(1,1,1));
-    glassSphere->transparency = 0.7f;
+    glassSphere->transparency = 0.1f;
     glassSphere->refractiveIndex = 1.0f;
     scene.objects.push_back(glassSphere);
 
@@ -165,8 +165,22 @@ void keyboard(unsigned char key, int x, int y) {
 
         case 'R':
             maxRecursionDepth++;
+            break;  
+
+        case 'f':
+            if (camera.fov)
+            {
+                camera.fov = camera.fov - 5;
+            }
+            std::cout <<"Fov atual: "<< camera.fov  << std::endl;
             break;
 
+        case 'F':
+            camera.fov = camera.fov + 5;
+            std::cout <<"Fov atual: "<< camera.fov  << std::endl;
+            break;
+
+        
     }
 
     glutPostRedisplay();
