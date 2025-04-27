@@ -1,4 +1,3 @@
-```
 # 🔦 Raycasting com OpenGL (GLUT)
 
 Este é um projeto simples de **ray casting** implementado em **C++ com OpenGL (usando GLUT)** para fins educacionais em disciplinas de Computação Gráfica.
@@ -19,17 +18,27 @@ sudo apt install build-essential freeglut3-dev
 sudo apt install make
 ```
 
----
-
 ## 🛠️ Como Compilar e Rodar
 
-Use o makefile incluído:
+Compilar e executar:
 
 ```bash
 make run
 ```
 
 (Ou apenas `make` para compilar.)
+
+Limpar compilação:
+
+```bash
+make clean
+```
+
+Limpar compilação e recompilar:
+
+```bash
+make rebuild
+```
 
 ---
 
@@ -45,7 +54,7 @@ make run
 
 ## 🧱 Como Instanciar Objetos
 
-Os objetos e luzes são adicionados diretamente na inicialização da cena (`main.cpp` ou `scene.cpp`).
+Os objetos e luzes são adicionados diretamente na inicialização da cena (`main.cpp` função `setup()`).
 
 ### Exemplo de adição de objetos:
 
@@ -82,7 +91,9 @@ scene.lightSources.push_back(Light(
 
 - **W / S** — Movimentar para frente/trás
 - **A / D** — Movimentar para esquerda/direita
-- **Setas ↑ / ↓ / ← / →** — Girar a câmera
+- **Mouse** — Girar a câmera
+- **Space** — Subir
+- **C** — descer
 - **ESC** — Encerrar o programa
 
 ---
@@ -97,7 +108,7 @@ Algumas melhorias planejadas para o projeto:
 - [ ] **Anti-aliasing** por amostragem múltipla (supersampling).
 - [ ] **Sistema de materiais** mais completo (brilho, rugosidade).
 - [ ] **Carregamento de cenas via arquivos externos** (ex: `.json` ou `.yaml`).
-
+- [ ] **Calcular a diferença entre rasterização e raycasting** em tempo de renderização.
 ---
 
 ## 📄 Licença
@@ -112,5 +123,3 @@ Este projeto é de uso livre para fins educacionais e pessoais.
 
 ![Cubo luminoso cor sólida](images/ciano_cube.png)
 
-
-```
