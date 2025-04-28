@@ -6,7 +6,9 @@ struct LightPoint : public Object {
 	Vec3 position;
 	Color lightColor;
 
-	LightPoint(Vec3 position, Color lightColor) : position(position), lightColor(lightColor) {}
+	LightPoint(Vec3 position, Color lightColor) : position(position), lightColor(lightColor) {
+		this->type = LIGHT_POINT;
+	}
 	bool isEmitter() const { return true; }
 	Color getIntensity() const { return lightColor; }
 

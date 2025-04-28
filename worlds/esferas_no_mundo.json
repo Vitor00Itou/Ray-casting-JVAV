@@ -1,0 +1,32 @@
+[
+    {
+      "type": "sphere",
+      "center": [0, 1, -5],
+      "radius": 1.0,
+      "color": [0.2, 0.7, 0.8],
+      "specular": 64,
+      "reflection": 0.5
+    },
+    {
+      "type": "sphere",
+      "center": [2, 1, -6],
+      "radius": 1.0,
+      "color": [0.8, 0.3, 0.3],
+      "transparency": 0.0,
+      "refractiveIndex": 1.5
+    },
+    {
+      "type": "sphere",
+      "center": [-2, 1, -6],
+      "radius": 1.0,
+      "color": [0.3, 0.8, 0.4],
+      "reflection": 0.3,
+      "emitter": true
+    },
+    {
+      "type": "light_point",
+      "position": [-2, 1, -1],
+      "color":[1,1,1]
+    }
+]
+

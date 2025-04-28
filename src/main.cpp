@@ -165,6 +165,23 @@ Box* parseBox(const nlohmann::json& obj) {
 
 }
 
+LightPoint* parseLightPoint(const nlohmann::json& obj) {
+    // Extrair os cantos mínimo e máximo do Box
+    Vec3 position = Vec3(obj["position"][0], obj["position"][1], obj["position"][2]);
+    
+    // Propriedades adicionais
+    Color color = Color(1.0f, 1.0f, 1.0f); // Cor padrão: branco
+
+    // Verificar e atribuir a cor, se fornecida
+    if (obj.contains("color")) {
+        color = Color(obj["color"][0], obj["color"][1], obj["color"][2]);
+    }
+
+
+    return new LightPoint(position, color);
+
+}
+
 void setupScene(const std::string& filename) {
     // Câmera olhando para o centro da cena
     camera = Camera(
@@ -192,12 +209,176 @@ void setupScene(const std::string& filename) {
             scene.objects.push_back(parsePlane(obj));
         } else if (type == "box") {
             scene.objects.push_back(parseBox(obj));
+        }else if (type == "light_point") {
+            scene.objects.push_back(parseLightPoint(obj));
         }
     }
 }
 
+void setupOutros3D(){
 
-void setupSceneW() {
+    // Câmera olhando para o centro da cena
+    camera = Camera(
+        Vec3(xcam, ycam, zcam),     // posição
+        Vec3(0, 0, -1),    // direção
+        Vec3(0, 1, 0),     // cima
+        fov              // fov
+    );
+
+    // Espaçamento
+    float spacing = 1.2f; // Distância entre as box
+    float boxSizeX = 0.9f;
+    float boxSizeY = 0.9f;
+    float depth = -11.0f; // Z fixo
+
+    float startX = -20.0f; // Começo no mundo
+    float startY = 5.0f;
+
+    // Função para criar uma caixa
+    auto addBox = [&](float x, float y) {
+        Vec3 minPoint(x, y, depth);
+        Vec3 maxPoint(x + boxSizeX, y + boxSizeY, depth - 1.0f);
+        scene.objects.push_back(new Box(minPoint, maxPoint, Color(1,0,1)));
+    };
+
+    // --- Letra O ---
+    for (int i = 0; i < 5; ++i) {
+        addBox(startX + i * spacing, startY);
+        addBox(startX + i * spacing, startY - 4 * spacing);
+    }
+    addBox(startX, startY - spacing);
+    addBox(startX, startY - 2 * spacing);
+    addBox(startX, startY - 3 * spacing);
+    addBox(startX + 4 * spacing, startY - spacing);
+    addBox(startX + 4 * spacing, startY - 2 * spacing);
+    addBox(startX + 4 * spacing, startY - 3 * spacing);
+
+    // --- Espaço entre letras ---
+    startX += 6 * spacing;
+
+    // --- Letra u ---
+    for (int i = 0; i < 5; ++i) {
+        addBox(startX, startY - i * spacing);
+        addBox(startX + 3 * spacing, startY - i * spacing);
+    }
+    for (int i = 1; i < 3; ++i) {
+        addBox(startX + i * spacing, startY - 4 * spacing);
+    }
+
+    // --- Espaço ---
+    startX += 5 * spacing;
+
+    // --- Letra t ---
+    for (int i = 0; i < 5; ++i) {
+        addBox(startX + 1 * spacing, startY - i * spacing);
+    }
+    for (int i = 0; i < 3; ++i) {
+        addBox(startX + i * spacing, startY);
+    }
+
+    // --- Espaço ---
+    startX += 5 * spacing;
+
+    // --- Letra r ---
+    for (int i = 0; i < 5; ++i) {
+        addBox(startX, startY - i * spacing);
+    }
+    addBox(startX + 2 * spacing, startY-2);
+    addBox(startX + 1 * spacing, startY-3);
+    addBox(startX + 2 * spacing, startY-4);
+    addBox(startX + 3 * spacing, startY-5);
+    addBox(startX + 1 * spacing, startY);
+    addBox(startX + 2 * spacing, startY);
+    addBox(startX + 3 * spacing, startY - spacing);
+
+    // --- Espaço ---
+    startX += 5 * spacing;
+
+    // --- Letra O ---
+    for (int i = 0; i < 5; ++i) {
+        addBox(startX + i * spacing, startY);
+        addBox(startX + i * spacing, startY - 4 * spacing);
+    }
+    addBox(startX, startY - spacing);
+    addBox(startX, startY - 2 * spacing);
+    addBox(startX, startY - 3 * spacing);
+    addBox(startX + 4 * spacing, startY - spacing);
+    addBox(startX + 4 * spacing, startY - 2 * spacing);
+    addBox(startX + 4 * spacing, startY - 3 * spacing);
+
+
+    // --- Espaço ---
+    startX += 6 * spacing;
+
+    // --- Letra s ---
+    for (int i = 0; i < 3; ++i) {
+        addBox(startX + i * spacing, startY);
+        addBox(startX + i * spacing, startY - 2 * spacing);
+        addBox(startX + i * spacing, startY - 4 * spacing);
+    }
+    addBox(startX, startY - spacing);
+    addBox(startX + 2 * spacing, startY - 3 * spacing);
+
+    // --- Espaço ---
+    startX += 5 * spacing;
+
+    // --- Ponto . . . ---
+    for (int d = 0; d < 3; ++d) {
+        addBox(startX + d * spacing, startY - 4 * spacing);
+    }
+
+    // --- Espaço ---
+    startX += 5 * spacing;
+
+    // --- Parênteses ( ---
+    for (int i = 0; i < 5; ++i) {
+        addBox(startX, startY - i * spacing);
+    }
+    addBox(startX + 1 * spacing, startY);
+    addBox(startX + 1 * spacing, startY - 4 * spacing);
+
+    // --- Espaço ---
+    startX += 3 * spacing;
+
+    // --- Letra 3 ---
+    addBox(startX, startY);
+    addBox(startX + 1 * spacing, startY);
+    addBox(startX + 2 * spacing, startY);
+    addBox(startX + 2 * spacing, startY - spacing);
+    addBox(startX + 1 * spacing, startY - 2 * spacing);
+    addBox(startX + 2 * spacing, startY - 3 * spacing);
+    addBox(startX, startY - 4 * spacing);
+    addBox(startX + 1 * spacing, startY - 4 * spacing);
+    addBox(startX + 2 * spacing, startY - 4 * spacing);
+
+    // --- Espaço ---
+    startX += 5 * spacing;
+
+    // --- Letra D ---
+    for (int i = 0; i < 5; ++i) {
+        addBox(startX, startY - i * spacing);
+    }
+    for (int i = 0; i < 4; ++i) {
+        addBox(startX + 3 * spacing, startY - 1 * spacing - i * spacing);
+    }
+    addBox(startX + 1 * spacing, startY);
+    addBox(startX + 2 * spacing, startY);
+    addBox(startX + 1 * spacing, startY - 4 * spacing);
+    addBox(startX + 2 * spacing, startY - 4 * spacing);
+
+    // --- Espaço ---
+    startX += 5 * spacing;
+
+    // --- Parênteses ) ---
+    for (int i = 0; i < 5; ++i) {
+        addBox(startX + 1 * spacing, startY - i * spacing);
+    }
+    addBox(startX, startY);
+    addBox(startX, startY - 4 * spacing);
+};
+
+
+void setupSceneDefault() {
     // Câmera olhando para o centro da cena
     camera = Camera(
         Vec3(xcam, ycam, zcam),     // posição
@@ -385,7 +566,7 @@ void keyboard(unsigned char key, int x, int y) {
         case 'g': {
             const float LUMINOSITY_INCREASE = 0.05;
             if (!cameraMode) {
-                scene.addToLuminosityG(LUMINOSITY_INCREASE);
+                scene.addToLuminosityG(-LUMINOSITY_INCREASE);
             }
             break;
         }
@@ -393,14 +574,14 @@ void keyboard(unsigned char key, int x, int y) {
         case 'G': {
             const float LUMINOSITY_INCREASE = 0.05;
             if (!cameraMode) {
-                scene.addToLuminosityG( - LUMINOSITY_INCREASE);
+                scene.addToLuminosityG(LUMINOSITY_INCREASE);
             }
             break;
         }
         case 'b': {
             const float LUMINOSITY_INCREASE = 0.05;
             if (!cameraMode) {
-                scene.addToLuminosityB(LUMINOSITY_INCREASE);
+                scene.addToLuminosityB(-LUMINOSITY_INCREASE);
             }
             break;
         }
@@ -408,7 +589,7 @@ void keyboard(unsigned char key, int x, int y) {
         case 'B': {
             const float LUMINOSITY_INCREASE = 0.05;
             if (!cameraMode) {
-                scene.addToLuminosityB( - LUMINOSITY_INCREASE);
+                scene.addToLuminosityB(LUMINOSITY_INCREASE);
             }
             break;
         }
@@ -416,7 +597,7 @@ void keyboard(unsigned char key, int x, int y) {
         case 'r': {
             const float LUMINOSITY_INCREASE = 0.05;
             if (!cameraMode) {
-                scene.addToLuminosityR(LUMINOSITY_INCREASE);
+                scene.addToLuminosityR(-LUMINOSITY_INCREASE);
             }
             break;
         }
@@ -424,7 +605,7 @@ void keyboard(unsigned char key, int x, int y) {
         case 'R': {
             const float LUMINOSITY_INCREASE = 0.05;
             if (!cameraMode) {
-                scene.addToLuminosityR( - LUMINOSITY_INCREASE);
+                scene.addToLuminosityR(LUMINOSITY_INCREASE);
             }
             break;
         }
@@ -492,8 +673,16 @@ void mouseMovement(int x, int y) {
 
 
 int main(int argc, char** argv) {
-    setupSceneW();
-    //setupScene("worlds/caixas.json");
+    if (argc == 2) {
+        std::string arg = argv[1];
+        if (arg == "3d") {
+            setupOutros3D();
+        } else {
+            setupScene(arg); // Argumento é nome de arquivo
+        }
+    } else {
+        setupSceneDefault(); // Nenhum argumento: usa o default
+    }
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);

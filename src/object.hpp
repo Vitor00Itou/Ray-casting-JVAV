@@ -9,7 +9,8 @@ enum ObjectType {
     UNDEFINED,
     SPHERE,
     PLANE,
-    BOX
+    BOX,
+    LIGHT_POINT
 };
 
 struct Object {
@@ -33,5 +34,5 @@ struct Object {
 
     virtual float getTransparency() const { return 0; }
     virtual float getRefractiveIndex() const { return 1; }
-    virtual float getReflectionCoefficient() const = 0;
+    virtual float getReflectionCoefficient() const { return 0; }
 };  

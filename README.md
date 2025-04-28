@@ -52,6 +52,7 @@ make rebuild
 - Texturização de objetos (mapa de textura simples).
 - **Reflexividade** (superfícies espelhadas).
 - **Transparência** (materiais translúcidos, tipo vidro).
+- **Carregamento de cenas via arquivos externos**`.json`.
 
 ---
 
@@ -89,7 +90,76 @@ scene.lightSources.push_back(Light(
 ```
 
 ---
+## 🧩 Rodar com Cena Externa (Arquivo JSON)
+O programa pode ser executado de duas formas:
 
+- Default: Se rodar normalmente (make run), o programa criará uma cena padrão configurada no código (função setup()).
+
+- Arquivo JSON: Se quiser carregar uma cena personalizada, basta passar o nome do arquivo .json como argumento.
+
+ **Exemplos:**
+
+Rodar a cena padrão (default):
+
+```bash
+make run
+```
+Rodar passando um arquivo de cena:
+
+```bash
+
+./jvav_raycasting worlds/exemple.json
+```
+Certifique-se de que o arquivo .json esteja no mesmo diretório (ou passe o caminho correto).
+
+---
+## 📜 Exemplo de Arquivo JSON de Cena
+Aqui está um exemplo de arquivo scene.json que cria uma esfera, um plano, uma caixa e uma fonte de luz pontual:
+
+```json
+[
+    {
+      "type": "sphere",
+      "center": [0, 1, -5],
+      "radius": 1.0,
+      "color": [0.2, 0.7, 0.8],
+      "specular": 64,
+      "reflection": 0.5,
+      "transparency": 0.2,
+      "refractiveIndex": 1.3,
+      "texture": "assets/marble.png",
+      "emitter": true
+    },
+    {
+      "type": "plane",
+      "point": [0, 0, 0],
+      "normal": [0, 1, 0],
+      "color": [0.8, 0.8, 0.8],
+      "specular": 16,
+      "reflection": 0.1,
+      "texture": "assets/floor.png"
+    },
+    {
+      "type": "box",
+      "minCorner": [-1, 0, -8],
+      "maxCorner": [1, 2, -6],
+      "color": [1.0, 0.0, 0.0],
+      "specular": 32,
+      "reflection": 0.3,
+      "transparency": 0.5,
+      "refractiveIndex": 1.5,
+      "texture": "assets/brick.png",
+      "emitter": false
+    },
+    {
+      "type": "light_point",
+      "position": [5, 10, 5],
+      "color": [1.0, 1.0, 1.0]
+    }
+]
+```
+
+---
 ## 🎮 Controles Modo Camera
 
 **Gerais:**
@@ -129,7 +199,6 @@ Algumas melhorias planejadas para o projeto:
 - [ ] **Novos tipos de objetos** (cilindros, cones, meshes).
 - [ ] **Anti-aliasing** por amostragem múltipla (supersampling).
 - [ ] **Sistema de materiais** mais completo (brilho, rugosidade).
-- [ ] **Carregamento de cenas via arquivos externos** (ex: `.json` ou `.yaml`).
 - [ ] **Calcular a diferença entre rasterização e raycasting** em tempo de renderização.
 ---
 

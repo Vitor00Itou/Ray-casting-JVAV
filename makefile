@@ -1,7 +1,7 @@
 # Diretórios
 SRC_DIR = src
 BUILD_DIR = build
-BIN = $(BUILD_DIR)/raycasting
+BIN = $(BUILD_DIR)/jvav_raycasting
 
 # Compilador e flags
 CXX = g++

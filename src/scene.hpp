@@ -64,6 +64,15 @@ struct Scene {
                 }
                 break;
             }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->position.y += 0.1;
+
+                }
+                break;
+            }
         
             default:
                 break;
@@ -94,6 +103,15 @@ struct Scene {
                 if (box) {
                     box->minCorner.y -= 0.1;
                     box->maxCorner.y -= 0.1;
+                }
+                break;
+            }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->position.y -= 0.1;
+
                 }
                 break;
             }
@@ -130,6 +148,15 @@ struct Scene {
                 }
                 break;
             }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->position.z += 0.1;
+
+                }
+                break;
+            }
         
             default:
                 break;
@@ -160,6 +187,15 @@ struct Scene {
                 if (box) {
                     box->minCorner.z -= 0.1;
                     box->maxCorner.z -= 0.1;
+                }
+                break;
+            }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->position.z -= 0.1;
+
                 }
                 break;
             }
@@ -196,6 +232,15 @@ struct Scene {
                 }
                 break;
             }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->position.x += 0.1;
+
+                }
+                break;
+            }
         
             default:
                 break;
@@ -226,6 +271,15 @@ struct Scene {
                 if (box) {
                     box->minCorner.x -= 0.1;
                     box->maxCorner.x -= 0.1;
+                }
+                break;
+            }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->position.x -= 0.1;
+
                 }
                 break;
             }
@@ -261,6 +315,15 @@ struct Scene {
                 }
                 break;
             }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->lightColor = lightPoint->lightColor + Color(luminosityIncrease, luminosityIncrease, luminosityIncrease);;
+
+                }
+                break;
+            }
         
             default:
                 break;
@@ -290,6 +353,15 @@ struct Scene {
                 Box* box = dynamic_cast<Box*>(obj);
                 if (box && box->isEmitter()) {
                     box->color = box->color + Color(luminosityIncrease, 0, 0);
+                }
+                break;
+            }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->lightColor = lightPoint->lightColor + Color(luminosityIncrease, 0, 0);;
+
                 }
                 break;
             }
@@ -325,6 +397,15 @@ struct Scene {
                 }
                 break;
             }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->lightColor = lightPoint->lightColor + Color(0, luminosityIncrease, 0);;
+
+                }
+                break;
+            }
         
             default:
                 break;
@@ -354,6 +435,15 @@ struct Scene {
                 Box* box = dynamic_cast<Box*>(obj);
                 if (box && box->isEmitter()) {
                     box->color = box->color + Color(0, 0, luminosityIncrease);
+                }
+                break;
+            }
+
+            case LIGHT_POINT: {
+                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
+                if (lightPoint) {
+                    lightPoint->lightColor = lightPoint->lightColor + Color(0, 0, luminosityIncrease);;
+
                 }
                 break;
             }
