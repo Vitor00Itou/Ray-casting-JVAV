@@ -1,0 +1,15 @@
+[
+	{
+	  "type": "sphere",
+	  "center": [0, 0, 2],
+	  "radius": 1,
+	  "texture": "assets/uranus.jpg"
+	},
+	{
+	  "type": "sphere",
+	  "center": [2, 0, 2],
+	  "radius": 1,
+	  "texture": "assets/uranus.jpg"
+	}
+  ]
+  

@@ -1,3 +1,10 @@
+#include <iostream>
+#include <chrono>
+#include <GL/glut.h>
+#include <vector>
+#include <cmath>
+#include <fstream>
+
 #include "ray_casting_renderer.hpp"
 #include "ray_object_renderer.hpp"
 #include "scene.hpp"
@@ -5,12 +12,7 @@
 #include "plane.hpp"
 #include "camera.hpp"
 #include "box.hpp"
-#include <iostream>
-#include <chrono>
-
-#include <GL/glut.h>
-#include <vector>
-#include <cmath>
+#include "../lib/json.hpp"
 
 // Tamanho da janela
 constexpr int WIDTH = 800;
@@ -42,7 +44,132 @@ RayObjectRenderer rayObjectRenderer(WIDTH, HEIGHT);
 Scene scene;
 Camera camera;
 
-void setupScene() {
+Sphere* parseSphere(const nlohmann::json& obj) {
+    Vec3 center = Vec3(obj["center"][0], obj["center"][1], obj["center"][2]);
+    float radius = obj["radius"];
+    Color color = Color(1.0f, 1.0f, 1.0f); // Padrão: branco
+    bool isEmitter = obj.value("emitter", false);
+    std::string texture = ""; // Sem textura por padrão
+    float specularShininess = 32.0f;
+
+    if (obj.contains("color")) {
+        color = Color(obj["color"][0], obj["color"][1], obj["color"][2]);
+    }
+
+    if (obj.contains("texture")) {
+        texture = obj["texture"];
+    }
+
+    if (obj.contains("specular")) {
+        specularShininess = obj["specular"];
+    }
+
+    return new Sphere(center, radius, color, texture.c_str(), isEmitter, specularShininess);
+}
+
+Plane* parsePlane(const nlohmann::json& obj) {
+    Vec3 point = Vec3(obj["point"][0], obj["point"][1], obj["point"][2]);
+    Vec3 normal = Vec3(obj["normal"][0], obj["normal"][1], obj["normal"][2]);
+    Color color = Color(1.0f, 1.0f, 1.0f); // Cor padrão: branco
+    bool isMirror = obj.value("mirror", false);
+    std::string texture = ""; // Sem textura por padrão
+    float transparency = 0.0f;
+    float refractiveIndex = 1.0f;
+
+    if (obj.contains("color")) {
+        color = Color(obj["color"][0], obj["color"][1], obj["color"][2]);
+    }
+
+    if (obj.contains("texture")) {
+        texture = obj["texture"];
+    }
+
+    if (obj.contains("transparency")) {
+        transparency = obj["transparency"];
+    }
+
+    if (obj.contains("refractiveIndex")) {
+        refractiveIndex = obj["refractiveIndex"];
+    }
+
+    // Se houver textura, criamos o plano com a textura
+    if (!texture.empty()) {
+        return new Plane(point, normal, texture.c_str());
+    } else {
+        // Se não houver textura, criamos o plano com a cor
+        return new Plane(point, normal, color);
+    }
+}
+
+Box* parseBox(const nlohmann::json& obj) {
+    // Extrair os cantos mínimo e máximo do Box
+    Vec3 minCorner = Vec3(obj["minCorner"][0], obj["minCorner"][1], obj["minCorner"][2]);
+    Vec3 maxCorner = Vec3(obj["maxCorner"][0], obj["maxCorner"][1], obj["maxCorner"][2]);
+    
+    // Propriedades adicionais
+    Color color = Color(1.0f, 1.0f, 1.0f); // Cor padrão: branco
+    bool isEmitter = obj.value("emitter", false);
+    bool isMirror = obj.value("mirror", false);
+    std::string texture = ""; // Sem textura por padrão
+    float transparency = 0.0f;
+    float refractiveIndex = 1.0f;
+
+    // Verificar e atribuir a cor, se fornecida
+    if (obj.contains("color")) {
+        color = Color(obj["color"][0], obj["color"][1], obj["color"][2]);
+    }
+
+    // Verificar e atribuir a textura, se fornecida
+    if (obj.contains("texture")) {
+        texture = obj["texture"];
+    }
+
+    // Se houver textura, criamos o box com a textura
+    if (!texture.empty()) {
+        
+        return new Box(minCorner, maxCorner, texture.c_str());
+    } else {
+        // Se não houver textura, criamos o box com a cor
+        if (isEmitter) {
+            return new Box(minCorner, maxCorner, color, isEmitter);
+        }
+        return new Box(minCorner, maxCorner, color);
+    }
+}
+
+void setupScene(const std::string& filename) {
+    // Câmera olhando para o centro da cena
+    camera = Camera(
+        Vec3(xcam, ycam, zcam),     // posição
+        Vec3(0, 0, -1),    // direção
+        Vec3(0, 1, 0),     // cima
+        fov              // fov
+    );
+
+    std::ifstream input(filename);
+    if (!input.is_open()) {
+        std::cerr << "Erro ao abrir o arquivo de cena: " << filename << std::endl;
+        return;
+    }
+
+    nlohmann::json sceneJson;
+    input >> sceneJson;
+
+    for (const auto& obj : sceneJson) {
+        std::string type = obj["type"];
+
+        if (type == "sphere") {
+            scene.objects.push_back(parseSphere(obj));
+        } else if (type == "plane") {
+            scene.objects.push_back(parsePlane(obj));
+        } else if (type == "box") {
+            scene.objects.push_back(parseBox(obj));
+        }
+    }
+}
+
+
+void setupSceneW() {
     // Câmera olhando para o centro da cena
     camera = Camera(
         Vec3(xcam, ycam, zcam),     // posição
@@ -290,7 +417,7 @@ void mouseMovement(int x, int y) {
 
 
 int main(int argc, char** argv) {
-    setupScene();
+    setupScene("worlds/scene.json");
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);

@@ -35,7 +35,6 @@ struct Sphere : public Object {
         return _isMirror;
     }
 
-
     Sphere(Vec3 c, float r) : center(c), radius(r) { 
         this->type = SPHERE;
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
