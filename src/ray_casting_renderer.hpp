@@ -48,6 +48,12 @@ struct RayCastingRenderer {
                 // Novo menor
                 closestT = hit.t;
 
+                // Se o objeto for inerte, apenas retorna a sua cor
+                if (obj->isInert()) {
+                    color = obj->getColor(hit);
+                    continue;
+                }
+
                 Color intensityAccum(0.0, 0.0, 0.0);
                 if (obj->isEmitter()) {
                     intensityAccum = obj->getIntensity();

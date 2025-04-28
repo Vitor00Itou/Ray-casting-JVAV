@@ -35,4 +35,6 @@ struct Object {
     virtual float getTransparency() const { return 0; }
     virtual float getRefractiveIndex() const { return 1; }
     virtual float getReflectionCoefficient() const { return 0; }
+    
+    virtual bool isInert() const { return false; }
 };  

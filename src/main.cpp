@@ -49,6 +49,7 @@ Sphere* parseSphere(const nlohmann::json& obj) {
     float radius = obj["radius"];
     Color color = Color(1.0f, 1.0f, 1.0f); // Padrão: branco
     bool isEmitter = obj.value("emitter", false);
+    bool isInert = obj.value("inert", false);
     std::string texture = ""; // Sem textura por padrão
     float specularShininess = 32.0f;
     float transparency = 0.0f;
@@ -79,18 +80,20 @@ Sphere* parseSphere(const nlohmann::json& obj) {
         transparency = obj["transparency"];
     }
 
-    return new Sphere(center, radius, color, texture.c_str(), isEmitter, specularShininess, reflectionCoefficient, transparency, refractiveIndex);
+    return new Sphere(center, radius, color, texture.c_str(), isEmitter, specularShininess, reflectionCoefficient, transparency, refractiveIndex, isInert);
 }
 
 Plane* parsePlane(const nlohmann::json& obj) {
     Vec3 point = Vec3(obj["point"][0], obj["point"][1], obj["point"][2]);
     Vec3 normal = Vec3(obj["normal"][0], obj["normal"][1], obj["normal"][2]);
+    bool isInert = obj.value("inert", false);
     Color color = Color(1.0f, 1.0f, 1.0f); // Cor padrão: branco
     std::string texture = ""; // Sem textura por padrão
     float specularShininess = 32.0f;
     float transparency = 0.0f;
     float refractiveIndex = 1.0f;
     float reflectionCoefficient = 0.0f;
+    
 
     if (obj.contains("color")) {
         color = Color(obj["color"][0], obj["color"][1], obj["color"][2]);
@@ -117,7 +120,7 @@ Plane* parsePlane(const nlohmann::json& obj) {
     }
 
 
-    return new Plane(point, normal, color, texture.c_str(), specularShininess, reflectionCoefficient, transparency, refractiveIndex);
+    return new Plane(point, normal, color, texture.c_str(), specularShininess, reflectionCoefficient, transparency, refractiveIndex, isInert);
 }
 
 Box* parseBox(const nlohmann::json& obj) {
@@ -128,6 +131,7 @@ Box* parseBox(const nlohmann::json& obj) {
     // Propriedades adicionais
     Color color = Color(1.0f, 1.0f, 1.0f); // Cor padrão: branco
     bool isEmitter = obj.value("emitter", false);
+    bool isInert = obj.value("inert", false);
     std::string texture = ""; // Sem textura por padrão
     float specularShininess = 32.0f;
     float transparency = 0.0f;
@@ -160,7 +164,7 @@ Box* parseBox(const nlohmann::json& obj) {
         reflectionCoefficient = obj["reflection"];
     }
 
-    return new Box(minCorner, maxCorner, color, texture.c_str(), isEmitter, specularShininess, reflectionCoefficient, transparency, refractiveIndex);
+    return new Box(minCorner, maxCorner, color, texture.c_str(), isEmitter, specularShininess, reflectionCoefficient, transparency, refractiveIndex, isInert);
 
 
 }
@@ -411,6 +415,7 @@ void setupSceneDefault() {
 
 
     // Adicionar paralelipipedos à cena
+    //scene.objects.push_back(new LightPoint(Vec3(0,5,-1), Color(0,0,1)));
     scene.objects.push_back(new Box(Vec3(-1, 2, -2), Vec3(1, 4, 0), Color(1, 1, 1), "assets/Jupitar.jpg", true));
     //scene.objects.push_back(new Box(Vec3(-1, 0, 6), Vec3(1, 2, 8), "assets/Jupitar.jpg"));
     scene.objects.push_back(new Box(Vec3(-1, 0, 10), Vec3(1, 2, 11), true));

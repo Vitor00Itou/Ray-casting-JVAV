@@ -13,10 +13,10 @@ struct Plane : public Object{
     Color color;     // Cor base
     Texture texture; // Textura
     float specularShininess = 32;
-
     float reflectionCoefficient = 0.0f;
     float transparency = 0.0f;      // 0 = opaco, 1 = totalmente transparente
     float refractiveIndex = 1.0f;    // 1.0 = ar, 1.5 = vidro, 2.4 = diamante
+    bool _isInert = false;
 
     Color getColor(const HitInfo& hit) const override {
         return texture.getColorFromImgCoordinates(hit.surfaceCoord);
@@ -43,7 +43,7 @@ struct Plane : public Object{
         texture = Texture(textureName);
     }
 
-    Plane(Vec3 p, Vec3 n, Color color, const char* textureName, float specularShininess, float reflectionCoefficient, float transparency, float refractiveIndex) : point(p), normal(n.normalize()), color(color), specularShininess(specularShininess), reflectionCoefficient(reflectionCoefficient), transparency(transparency), refractiveIndex(refractiveIndex) {
+    Plane(Vec3 p, Vec3 n, Color color, const char* textureName, float specularShininess, float reflectionCoefficient, float transparency, float refractiveIndex, bool isInert) : point(p), normal(n.normalize()), color(color), specularShininess(specularShininess), reflectionCoefficient(reflectionCoefficient), transparency(transparency), refractiveIndex(refractiveIndex), _isInert(isInert) {
         this->type = PLANE;
         texture = Texture(textureName, color);
     }
@@ -63,6 +63,8 @@ struct Plane : public Object{
     float getReflectionCoefficient() const override{
         return reflectionCoefficient;
     }
+
+    virtual bool isInert() const override { return _isInert; }
 
 
     HitInfo intersect(const Ray& ray) const {

@@ -17,7 +17,7 @@ struct Box : public Object {
     float reflectionCoefficient = 0.0f;
     float transparency = 0.0f;      // 0 = opaco, 1 = totalmente transparente
     float refractiveIndex = 1.0f;    // 1.0 = ar, 1.5 = vidro, 2.4 = diamante
-
+    bool _isInert = false;
 
     Box(Vec3 minC, Vec3 maxC) : minCorner(minC), maxCorner(maxC) {
         this->type = BOX;
@@ -67,7 +67,7 @@ struct Box : public Object {
         texture = Texture(textureName);
     }
 
-    Box(Vec3 minC, Vec3 maxC, Color color, const char* textureName, bool isEmitter, float specularShininess, float reflectionCoefficient, float transparency, float refractiveIndex) : minCorner(minC), maxCorner(maxC), color(color), _isEmitter(isEmitter), specularShininess(specularShininess), reflectionCoefficient(reflectionCoefficient), transparency(transparency), refractiveIndex(refractiveIndex) {
+    Box(Vec3 minC, Vec3 maxC, Color color, const char* textureName, bool isEmitter, float specularShininess, float reflectionCoefficient, float transparency, float refractiveIndex, bool isInert) : minCorner(minC), maxCorner(maxC), color(color), _isEmitter(isEmitter), specularShininess(specularShininess), reflectionCoefficient(reflectionCoefficient), transparency(transparency), refractiveIndex(refractiveIndex), _isInert(isInert) {
         this->type = BOX;
         minCorner = Vec3(std::min(minC.x, maxC.x), std::min(minC.y, maxC.y), std::min(minC.z, maxC.z));
         maxCorner = Vec3(std::max(minC.x, maxC.x), std::max(minC.y, maxC.y), std::max(minC.z, maxC.z));
@@ -100,6 +100,8 @@ struct Box : public Object {
     float getReflectionCoefficient() const override { 
         return reflectionCoefficient; 
     }
+
+    virtual bool isInert() const override { return _isInert; }
 
     HitInfo intersect(const Ray& ray) const override {
         // Método do Slab para AABB (axis aligned bounding box)

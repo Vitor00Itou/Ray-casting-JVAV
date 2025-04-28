@@ -19,6 +19,7 @@ struct Sphere : public Object {
     float reflectionCoefficient = 0.0f;
     float transparency = 0.0f;      // 0 = opaco, 1 = totalmente transparente
     float refractiveIndex = 1.0f;    // 1.0 = ar, 1.5 = vidro, 2.4 = diamante
+    bool _isInert = false;
 
     Color getColor(const HitInfo& hit) const override {
         return texture.getColorFromImgCoordinates(hit.surfaceCoord);
@@ -66,7 +67,7 @@ struct Sphere : public Object {
         this->type = SPHERE;
         texture = Texture(textureName);
     }
-    Sphere(Vec3 c, float r, Color color, const char* textureName, bool isEmitter, float specularShininess, float reflectionCoefficient, float transparency, float refractiveIndex) : center(c), radius(r), color(color), _isEmitter(isEmitter), specularShininess(specularShininess), reflectionCoefficient(reflectionCoefficient), transparency(transparency), refractiveIndex(refractiveIndex) {
+    Sphere(Vec3 c, float r, Color color, const char* textureName, bool isEmitter, float specularShininess, float reflectionCoefficient, float transparency, float refractiveIndex, bool isInert) : center(c), radius(r), color(color), _isEmitter(isEmitter), specularShininess(specularShininess), reflectionCoefficient(reflectionCoefficient), transparency(transparency), refractiveIndex(refractiveIndex), _isInert(isInert) {
         this->type = SPHERE;
         texture = Texture(textureName, color);
     }
@@ -115,4 +116,6 @@ struct Sphere : public Object {
     float getReflectionCoefficient() const override {
         return reflectionCoefficient;
     }
+
+    virtual bool isInert() const override { return _isInert; }
 };

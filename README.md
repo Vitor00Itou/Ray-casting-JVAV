@@ -222,3 +222,4 @@ Este projeto é de uso livre para fins educacionais e pessoais.
 
 ![Cubo luminoso cor sólida](images/transparent_box.png)
 
+![Cubo luminoso cor sólida](images/solar_system.png)
