@@ -105,11 +105,9 @@ struct Scene {
 
     void moveCurrentObjFront() {
         Object* obj = objects[currentObj];
-        std::cout << "Type: " << obj->type << std::endl;
         switch (obj->type) {
             case SPHERE: {
                 Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                std::cout << sphere->center.z << std::endl;
                 if (sphere) {
                     sphere->center.z += 0.1;
                 }
@@ -260,6 +258,102 @@ struct Scene {
                 Box* box = dynamic_cast<Box*>(obj);
                 if (box && box->isEmitter()) {
                     box->color = box->color + Color(luminosityIncrease, luminosityIncrease, luminosityIncrease);
+                }
+                break;
+            }
+        
+            default:
+                break;
+        }
+    }
+
+    void addToLuminosityR(float luminosityIncrease) {
+        Object* obj = objects[currentObj];
+        switch (obj->type) {
+            case SPHERE: {
+                Sphere* sphere = dynamic_cast<Sphere*>(obj);
+                if (sphere && sphere->isEmitter()) {
+                    sphere->color = sphere->color + Color(luminosityIncrease, 0, 0);
+                }
+                break;
+            }
+
+            case PLANE: {
+                Plane* plane = dynamic_cast<Plane*>(obj);
+                if (plane && plane->isEmitter()) {
+                    plane->color = plane->color + Color(luminosityIncrease, 0, 0);
+                }
+                break;
+            }
+
+            case BOX: {
+                Box* box = dynamic_cast<Box*>(obj);
+                if (box && box->isEmitter()) {
+                    box->color = box->color + Color(luminosityIncrease, 0, 0);
+                }
+                break;
+            }
+        
+            default:
+                break;
+        }
+    }
+
+    void addToLuminosityG(float luminosityIncrease) {
+        Object* obj = objects[currentObj];
+        switch (obj->type) {
+            case SPHERE: {
+                Sphere* sphere = dynamic_cast<Sphere*>(obj);
+                if (sphere && sphere->isEmitter()) {
+                    sphere->color = sphere->color + Color(0, luminosityIncrease, 0);
+                }
+                break;
+            }
+
+            case PLANE: {
+                Plane* plane = dynamic_cast<Plane*>(obj);
+                if (plane && plane->isEmitter()) {
+                    plane->color = plane->color + Color(0, luminosityIncrease, 0);
+                }
+                break;
+            }
+
+            case BOX: {
+                Box* box = dynamic_cast<Box*>(obj);
+                if (box && box->isEmitter()) {
+                    box->color = box->color + Color(0, luminosityIncrease, 0);
+                }
+                break;
+            }
+        
+            default:
+                break;
+        }
+    }
+
+    void addToLuminosityB(float luminosityIncrease) {
+        Object* obj = objects[currentObj];
+        switch (obj->type) {
+            case SPHERE: {
+                Sphere* sphere = dynamic_cast<Sphere*>(obj);
+                if (sphere && sphere->isEmitter()) {
+                    sphere->color = sphere->color + Color(0, 0, luminosityIncrease);
+                }
+                break;
+            }
+
+            case PLANE: {
+                Plane* plane = dynamic_cast<Plane*>(obj);
+                if (plane && plane->isEmitter()) {
+                    plane->color = plane->color + Color(0, 0, luminosityIncrease);
+                }
+                break;
+            }
+
+            case BOX: {
+                Box* box = dynamic_cast<Box*>(obj);
+                if (box && box->isEmitter()) {
+                    box->color = box->color + Color(0, 0, luminosityIncrease);
                 }
                 break;
             }

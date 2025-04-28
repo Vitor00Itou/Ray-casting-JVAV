@@ -334,7 +334,7 @@ void keyboard(unsigned char key, int x, int y) {
             }
             break;
 
-        case 'r':
+        case 'z':
             if (maxRecursionDepth)
             {
                 maxRecursionDepth--;
@@ -342,7 +342,7 @@ void keyboard(unsigned char key, int x, int y) {
             
             break;
 
-        case 'R':
+        case 'Z':
             maxRecursionDepth++;
             break;  
 
@@ -361,7 +361,6 @@ void keyboard(unsigned char key, int x, int y) {
 
         case 'x': {
             cameraMode = !cameraMode;
-            std::cout << cameraMode << std::endl;
             std::vector<std::string> modes = {"OBJECT MODE ON", "CAMERA MODE ON"};
             std::cout << modes[cameraMode] << std::endl;
             break;
@@ -370,7 +369,7 @@ void keyboard(unsigned char key, int x, int y) {
         case 'l': {
             const float LUMINOSITY_INCREASE = 0.05;
             if (!cameraMode) {
-                scene.addToLuminosity(LUMINOSITY_INCREASE);
+                scene.addToLuminosity(-LUMINOSITY_INCREASE);
             }
             break;
         }
@@ -378,7 +377,54 @@ void keyboard(unsigned char key, int x, int y) {
         case 'L': {
             const float LUMINOSITY_INCREASE = 0.05;
             if (!cameraMode) {
-                scene.addToLuminosity( - LUMINOSITY_INCREASE);
+                scene.addToLuminosity(LUMINOSITY_INCREASE);
+            }
+            break;
+        }
+
+        case 'g': {
+            const float LUMINOSITY_INCREASE = 0.05;
+            if (!cameraMode) {
+                scene.addToLuminosityG(LUMINOSITY_INCREASE);
+            }
+            break;
+        }
+
+        case 'G': {
+            const float LUMINOSITY_INCREASE = 0.05;
+            if (!cameraMode) {
+                scene.addToLuminosityG( - LUMINOSITY_INCREASE);
+            }
+            break;
+        }
+        case 'b': {
+            const float LUMINOSITY_INCREASE = 0.05;
+            if (!cameraMode) {
+                scene.addToLuminosityB(LUMINOSITY_INCREASE);
+            }
+            break;
+        }
+
+        case 'B': {
+            const float LUMINOSITY_INCREASE = 0.05;
+            if (!cameraMode) {
+                scene.addToLuminosityB( - LUMINOSITY_INCREASE);
+            }
+            break;
+        }
+
+        case 'r': {
+            const float LUMINOSITY_INCREASE = 0.05;
+            if (!cameraMode) {
+                scene.addToLuminosityR(LUMINOSITY_INCREASE);
+            }
+            break;
+        }
+
+        case 'R': {
+            const float LUMINOSITY_INCREASE = 0.05;
+            if (!cameraMode) {
+                scene.addToLuminosityR( - LUMINOSITY_INCREASE);
             }
             break;
         }
@@ -393,14 +439,15 @@ void specialKeyboard(int key, int x, int y) {
         switch (key) {
             case GLUT_KEY_LEFT: {
                 scene.previousObj();
+                std::cout << "Objeto atual: " << scene.currentObj << "\n";
                 break;
             }
             case GLUT_KEY_RIGHT: {
                 scene.nextObj();
+                std::cout << "Objeto atual: " << scene.currentObj << "\n";
                 break;
             }
         }
-        std::cout << "Objeto atual: " << scene.currentObj << "\n";
         // luminosidade (talvez rgb separadamente)
         // transparencia
         // refração (em objetos transparentes)

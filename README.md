@@ -90,19 +90,37 @@ scene.lightSources.push_back(Light(
 
 ---
 
-## 🎮 Controles
+## 🎮 Controles Modo Camera
 
-- **W / S** — Movimentar para frente/trás
-- **A / D** — Movimentar para esquerda/direita
-- **Mouse** — Girar a câmera
-- **Space** — Subir
-- **C** — descer
+**Gerais:**
 - **ESC** — Encerrar o programa
-- **K** — Ativar/desativar o **ray casting**
-- **T** — Ativar/desativar monitoramento de tempo de renderização por frame
-- **K/k** — Aumentar/Diminutir quantidade máxima de recastings de raios
+- **K** — Ativar/Desativar o **ray casting**
+- **T** — Ativar/Desativar monitoramento de tempo de renderização por frame
+- **Z/z** — Aumentar/Diminutir quantidade máxima de recastings de raios
 - **F/f** — Aumentar/Diminutir o fov da camera
+- **x** — Alternar para modo de controle de objetos
+- **Mouse** — Girar a câmera
+
+**Modo Câmera:**
+- **W / S** — Movimentar camera para frente/trás
+- **A / D** — Movimentar camera para esquerda/direita
+- **Space** — Subir camera
+- **C** — Descer objeyo
+
+**Modo Objeto:**
+- ← /→ — Iterar pela lista de objetos no mundo
+- **W / S** — Movimentar objeto para frente/trás
+- **A / D** — Movimentar objeto para esquerda/direita
+- **Space** — Subir objeto
+- **C** — Descer objeto
+- **L/l** — Aumentar/Diminutir intensidade da luz do objeto (Se for emissor de luz)
+- **R/r** — Aumentar/Diminutir intensidade da luz vermelha do objeto (Se for emissor de luz)
+- **G/g** — Aumentar/Diminutir intensidade da luz verde do objeto (Se for emissor de luz)
+- **B/b** — Aumentar/Diminutir intensidade da luz azul do objeto (Se for emissor de luz)
+
 ---
+
+
 
 ## 🎯 Trabalhos Futuros
 
