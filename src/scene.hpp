@@ -177,6 +177,39 @@ struct Scene {
             case SPHERE: {
                 Sphere* sphere = dynamic_cast<Sphere*>(obj);
                 if (sphere) {
+                    sphere->center.x += 0.1;
+                }
+                break;
+            }
+
+            case PLANE: {
+                Plane* plane = dynamic_cast<Plane*>(obj);
+                if (plane) {
+                    plane->point.x += 0.1;
+                }
+                break;
+            }
+
+            case BOX: {
+                Box* box = dynamic_cast<Box*>(obj);
+                if (box) {
+                    box->minCorner.x += 0.1;
+                    box->maxCorner.x += 0.1;
+                }
+                break;
+            }
+        
+            default:
+                break;
+        }
+    }
+
+    void moveCurrentObjRight() {
+        Object* obj = objects[currentObj];
+        switch (obj->type) {
+            case SPHERE: {
+                Sphere* sphere = dynamic_cast<Sphere*>(obj);
+                if (sphere) {
                     sphere->center.x -= 0.1;
                 }
                 break;
@@ -204,30 +237,29 @@ struct Scene {
         }
     }
 
-    void moveCurrentObjRight() {
+    void addToLuminosity(float luminosityIncrease) {
         Object* obj = objects[currentObj];
         switch (obj->type) {
             case SPHERE: {
                 Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere) {
-                    sphere->center.x += 0.1;
+                if (sphere && sphere->isEmitter()) {
+                    sphere->color = sphere->color + Color(luminosityIncrease, luminosityIncrease, luminosityIncrease);
                 }
                 break;
             }
 
             case PLANE: {
                 Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane) {
-                    plane->point.x += 0.1;
+                if (plane && plane->isEmitter()) {
+                    plane->color = plane->color + Color(luminosityIncrease, luminosityIncrease, luminosityIncrease);
                 }
                 break;
             }
 
             case BOX: {
                 Box* box = dynamic_cast<Box*>(obj);
-                if (box) {
-                    box->minCorner.x += 0.1;
-                    box->maxCorner.x += 0.1;
+                if (box && box->isEmitter()) {
+                    box->color = box->color + Color(luminosityIncrease, luminosityIncrease, luminosityIncrease);
                 }
                 break;
             }

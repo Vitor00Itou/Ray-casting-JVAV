@@ -204,10 +204,29 @@ void keyboard(unsigned char key, int x, int y) {
             std::cout <<"Fov atual: "<< camera.fov  << std::endl;
             break;
 
-        case 'x':
+        case 'x': {
             cameraMode = !cameraMode;
             std::cout << cameraMode << std::endl;
+            std::vector<std::string> modes = {"OBJECT MODE ON", "CAMERA MODE ON"};
+            std::cout << modes[cameraMode] << std::endl;
             break;
+        }
+
+        case 'l': {
+            const float LUMINOSITY_INCREASE = 0.05;
+            if (!cameraMode) {
+                scene.addToLuminosity(LUMINOSITY_INCREASE);
+            }
+            break;
+        }
+
+        case 'L': {
+            const float LUMINOSITY_INCREASE = 0.05;
+            if (!cameraMode) {
+                scene.addToLuminosity( - LUMINOSITY_INCREASE);
+            }
+            break;
+        }
         
     }
 
@@ -227,6 +246,10 @@ void specialKeyboard(int key, int x, int y) {
             }
         }
         std::cout << "Objeto atual: " << scene.currentObj << "\n";
+        // luminosidade (talvez rgb separadamente)
+        // transparencia
+        // refração (em objetos transparentes)
+        // reflexao
     }
 
     glutPostRedisplay();
@@ -235,8 +258,6 @@ void specialKeyboard(int key, int x, int y) {
 inline float radians(float degrees) {
     return degrees * (M_PI / 180.0f);
 }
-
-
 
 void mouseMovement(int x, int y) {
     if (justWarped) {
