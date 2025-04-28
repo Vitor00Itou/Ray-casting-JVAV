@@ -25,7 +25,7 @@ struct Sphere : public Object {
 
     Vec3 getCenter() const override {
         return center;
-    } ;
+    };
 
     float getSpecularShininess() const override {
         return specularShininess;
@@ -37,29 +37,37 @@ struct Sphere : public Object {
 
 
     Sphere(Vec3 c, float r) : center(c), radius(r) { 
+        this->type = SPHERE;
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
 
     Sphere(Vec3 c, float r, bool isMirror) : center(c), radius(r), _isMirror(isMirror){ 
+        this->type = SPHERE;
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
 
     Sphere(Vec3 c, float r, Color color) : center(c), radius(r), color(color) {
+        this->type = SPHERE;
         texture = Texture(color);
     }
     Sphere(Vec3 c, float r, Color color, bool isEmitter) : center(c), radius(r), color(color), _isEmitter(isEmitter) {
+        this->type = SPHERE;
         texture = Texture(color);
     }
     Sphere(Vec3 c, float r, const char* textureName) : center(c), radius(r) {
+        this->type = SPHERE;
         texture = Texture(textureName);
     }
     Sphere(Vec3 c, float r, const char* textureName, bool isEmitter) : center(c), radius(r), _isEmitter(isEmitter) {
+        this->type = SPHERE;
         texture = Texture(textureName);
     }
     Sphere(Vec3 c, float r, Color color, const char* textureName, bool isEmitter) : center(c), radius(r), color(color), _isEmitter(isEmitter) {
+        this->type = SPHERE;
         texture = Texture(textureName);
     }
     Sphere(Vec3 c, float r, Color color, const char* textureName, bool isEmitter, float specularShininess) : center(c), radius(r), color(color), _isEmitter(isEmitter), specularShininess(specularShininess) {
+        this->type = SPHERE;
         texture = Texture(textureName);
     }
 

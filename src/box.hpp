@@ -17,6 +17,7 @@ struct Box : public Object {
     float refractiveIndex = 1.0f;    
 
     Box(Vec3 minC, Vec3 maxC) : minCorner(minC), maxCorner(maxC) {
+        this->type = BOX;
         minCorner = Vec3(std::min(minC.x, maxC.x), std::min(minC.y, maxC.y), std::min(minC.z, maxC.z));
         maxCorner = Vec3(std::max(minC.x, maxC.x), std::max(minC.y, maxC.y), std::max(minC.z, maxC.z));
 
@@ -24,6 +25,7 @@ struct Box : public Object {
     }
 
     Box(Vec3 minC, Vec3 maxC, bool isMirror) : minCorner(minC), maxCorner(maxC), _isMirror(isMirror) {
+        this->type = BOX;
         minCorner = Vec3(std::min(minC.x, maxC.x), std::min(minC.y, maxC.y), std::min(minC.z, maxC.z));
         maxCorner = Vec3(std::max(minC.x, maxC.x), std::max(minC.y, maxC.y), std::max(minC.z, maxC.z));
 
@@ -31,6 +33,7 @@ struct Box : public Object {
     }
 
     Box(Vec3 minC, Vec3 maxC, Color color) : minCorner(minC), maxCorner(maxC), color(color) {
+        this->type = BOX;
         minCorner = Vec3(std::min(minC.x, maxC.x), std::min(minC.y, maxC.y), std::min(minC.z, maxC.z));
         maxCorner = Vec3(std::max(minC.x, maxC.x), std::max(minC.y, maxC.y), std::max(minC.z, maxC.z));
 
@@ -38,6 +41,7 @@ struct Box : public Object {
     }
 
     Box(Vec3 minC, Vec3 maxC, Color color, bool isEmitter) : minCorner(minC), maxCorner(maxC), color(color), _isEmitter(isEmitter) {
+        this->type = BOX;
         minCorner = Vec3(std::min(minC.x, maxC.x), std::min(minC.y, maxC.y), std::min(minC.z, maxC.z));
         maxCorner = Vec3(std::max(minC.x, maxC.x), std::max(minC.y, maxC.y), std::max(minC.z, maxC.z));
 
@@ -45,6 +49,7 @@ struct Box : public Object {
     }
 
     Box(Vec3 minC, Vec3 maxC, const char* textureName) : minCorner(minC), maxCorner(maxC) {
+        this->type = BOX;
         minCorner = Vec3(std::min(minC.x, maxC.x), std::min(minC.y, maxC.y), std::min(minC.z, maxC.z));
         maxCorner = Vec3(std::max(minC.x, maxC.x), std::max(minC.y, maxC.y), std::max(minC.z, maxC.z));
 
@@ -52,6 +57,7 @@ struct Box : public Object {
     }
 
     Box(Vec3 minC, Vec3 maxC, Color color, const char* textureName, bool isEmitter) : minCorner(minC), maxCorner(maxC), color(color), _isEmitter(isEmitter) {
+        this->type = BOX;
         minCorner = Vec3(std::min(minC.x, maxC.x), std::min(minC.y, maxC.y), std::min(minC.z, maxC.z));
         maxCorner = Vec3(std::max(minC.x, maxC.x), std::max(minC.y, maxC.y), std::max(minC.z, maxC.z));
 

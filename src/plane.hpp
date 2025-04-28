@@ -21,32 +21,33 @@ struct Plane : public Object{
     }
 
     Plane(Vec3 p, Vec3 n) : point(p), normal(n.normalize()) {
+        this->type = PLANE;
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
 
     Plane(Vec3 p, Vec3 n, bool isMirror) : point(p), normal(n.normalize()),_isMirror(isMirror) {
+        this->type = PLANE;
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
 
 
     Plane(Vec3 p, Vec3 n, Color color) : point(p), normal(n.normalize()), color(color) {
+        this->type = PLANE;
         texture = Texture(color);
     }
 
     Plane(Vec3 p, Vec3 n, const char* textureName) : point(p), normal(n.normalize()) {
+        this->type = PLANE;
         texture = Texture(textureName);
     }
 
     Vec3 getCenter() const override{
         return point;
-    } ;
-
+    };
 
     bool isMirror() const override{
         return _isMirror;
     }
-
-
 
     HitInfo intersect(const Ray& ray) const {
         float denom = normal.dot(ray.direction);

@@ -5,7 +5,15 @@
 #include "ray.hpp"
 #include "texture.hpp"
 
+enum ObjectType {
+    UNDEFINED,
+    SPHERE,
+    PLANE,
+    BOX
+};
+
 struct Object {
+    ObjectType type = UNDEFINED;
     virtual HitInfo intersect(const Ray& ray) const = 0;
     virtual Vec3 getCenter() const = 0;
     virtual ~Object() {}
@@ -25,4 +33,4 @@ struct Object {
     virtual bool isTransparent() const { return false; }
     virtual float getTransparency() const { return 0; }
     virtual float getRefractiveIndex() const { return 1; }
-};
+};  

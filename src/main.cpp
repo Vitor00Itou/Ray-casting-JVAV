@@ -33,9 +33,9 @@ int windowHeight = HEIGHT;
 int centerX = windowWidth / 2;
 int centerY = windowHeight / 2;
 bool justWarped = false;
+bool cameraMode = true;
 
 int maxRecursionDepth = 10;
-
 
 RayCastingRenderer rayCastingRenderer(WIDTH, HEIGHT);
 RayObjectRenderer rayObjectRenderer(WIDTH, HEIGHT);
@@ -124,20 +124,36 @@ void keyboard(unsigned char key, int x, int y) {
             break;
 
         case 'w':
-            //Faz a camera andar na direção que a camera aponta
-            camera.position = camera.position + camera.forward.normalize()*0.1;
+            if (cameraMode) {
+                //Faz a camera andar na direção que a camera aponta
+                camera.position = camera.position + camera.forward.normalize()*0.1;
+            } else {
+                scene.moveCurrentObjFront();
+            }
             break;
         case 's':
-            camera.position = camera.position - camera.forward.normalize()*0.1;
+            if (cameraMode) {
+                camera.position = camera.position - camera.forward.normalize()*0.1;
+            } else {
+                scene.moveCurrentObjBack();
+            }
             break;
         case 'a':{
-            Vec3 right = (camera.forward.cross(camera.up)).normalize();  // Acha a direta da camera
-            camera.position = camera.position - right * 0.1f; // Move para a esquerda
+            if (cameraMode) {
+                Vec3 right = (camera.forward.cross(camera.up)).normalize();  // Acha a direta da camera
+                camera.position = camera.position - right * 0.1f; // Move para a esquerda
+            } else {
+                scene.moveCurrentObjLeft();
+            }
             break;
         }
         case 'd':{
-            Vec3 right = (camera.forward.cross(camera.up)).normalize();  // Acha a direta da camera
-            camera.position = camera.position + right * 0.1f; // Move para a direita
+            if (cameraMode) {
+                Vec3 right = (camera.forward.cross(camera.up)).normalize();  // Acha a direta da camera
+                camera.position = camera.position + right * 0.1f; // Move para a direita
+            } else {
+                scene.moveCurrentObjRight();
+            }
             break;
         }
         case 'k':
@@ -149,10 +165,18 @@ void keyboard(unsigned char key, int x, int y) {
             break;
 
         case ' ':  // Espaço sobe
-            camera.position.y += 0.1f;
+            if (cameraMode) {
+                camera.position.y += 0.1f;
+            } else {
+                scene.moveCurrentObjUp();
+            }
             break;
-        case 'c':  // Espaço sobe
-            camera.position.y -= 0.1f;
+        case 'c':  // C desce
+            if (cameraMode) {
+                camera.position.y -= 0.1f;
+            } else {
+                scene.moveCurrentObjDown();
+            }
             break;
 
         case 'r':
@@ -180,7 +204,29 @@ void keyboard(unsigned char key, int x, int y) {
             std::cout <<"Fov atual: "<< camera.fov  << std::endl;
             break;
 
+        case 'x':
+            cameraMode = !cameraMode;
+            std::cout << cameraMode << std::endl;
+            break;
         
+    }
+
+    glutPostRedisplay();
+}
+
+void specialKeyboard(int key, int x, int y) {
+    if (!cameraMode) {
+        switch (key) {
+            case GLUT_KEY_LEFT: {
+                scene.previousObj();
+                break;
+            }
+            case GLUT_KEY_RIGHT: {
+                scene.nextObj();
+                break;
+            }
+        }
+        std::cout << "Objeto atual: " << scene.currentObj << "\n";
     }
 
     glutPostRedisplay();
@@ -238,6 +284,7 @@ int main(int argc, char** argv) {
 
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboard);
+    glutSpecialFunc(specialKeyboard);
     glutSetCursor(GLUT_CURSOR_NONE); // Esconde o cursor
     glutPassiveMotionFunc(mouseMovement); // Configura o callback do mouse
     glutWarpPointer(centerX, centerY); 
