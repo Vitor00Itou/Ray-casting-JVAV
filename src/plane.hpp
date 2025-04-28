@@ -12,7 +12,9 @@ struct Plane : public Object{
     Vec3 normal;     // A normal do plano (normalizada)
     Color color;     // Cor base
     Texture texture; // Textura
-    bool _isMirror = false;
+    float specularShininess = 32;
+
+    float reflectionCoefficient = 0.0f;
     float transparency = 0.0f;      // 0 = opaco, 1 = totalmente transparente
     float refractiveIndex = 1.0f;    // 1.0 = ar, 1.5 = vidro, 2.4 = diamante
 
@@ -25,7 +27,7 @@ struct Plane : public Object{
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
 
-    Plane(Vec3 p, Vec3 n, bool isMirror) : point(p), normal(n.normalize()),_isMirror(isMirror) {
+    Plane(Vec3 p, Vec3 n, float reflectionCoefficient) : point(p), normal(n.normalize()),reflectionCoefficient(reflectionCoefficient){
         this->type = PLANE;
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
@@ -41,13 +43,27 @@ struct Plane : public Object{
         texture = Texture(textureName);
     }
 
+    Plane(Vec3 p, Vec3 n, Color color, const char* textureName, float specularShininess, float reflectionCoefficient, float transparency, float refractiveIndex) : point(p), normal(n.normalize()), color(color), specularShininess(specularShininess), reflectionCoefficient(reflectionCoefficient), transparency(transparency), refractiveIndex(refractiveIndex) {
+        this->type = PLANE;
+        texture = Texture(textureName, color);
+    }
+
     Vec3 getCenter() const override{
         return point;
     };
 
-    bool isMirror() const override{
-        return _isMirror;
+    bool isReflective() const override{
+        return reflectionCoefficient > 0.0f;
     }
+
+    float getSpecularShininess() const override {
+        return specularShininess;
+    }
+
+    float getReflectionCoefficient() const override{
+        return reflectionCoefficient;
+    }
+
 
     HitInfo intersect(const Ray& ray) const {
         float denom = normal.dot(ray.direction);

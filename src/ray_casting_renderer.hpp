@@ -4,8 +4,6 @@
 #include <vector>
 #include <algorithm>
 
-float reflectionCoefficient = 1;
-
 struct RayCastingRenderer {
     int width, height;
     std::vector<unsigned char> framebuffer;
@@ -126,8 +124,7 @@ struct RayCastingRenderer {
                         cosAngNormalHalf = std::max(0.0f, cosAngNormalHalf);
 
                         // Coeficiente especular
-                        //float shininess = obj->getShininess(); // <- cada objeto pode ter o seu!
-                        float shininess = 32;
+                        float shininess = obj->getSpecularShininess(); // <- cada objeto pode ter o seu!
                         float specularFactor = pow(cosAngNormalHalf, shininess);
                 
                         Color specularColor = light->getIntensity() * specularFactor;
@@ -153,13 +150,14 @@ struct RayCastingRenderer {
                 color.b = obj->getColor(hit).b * intensityAccum.b;
 
                 // Se o objeto for um espelho, refletir o raio
-                if (obj->isMirror()) {
+                if (obj->isReflective()) {
                     // Cálculo da reflexão (recursão de reflexões)
                     Vec3 reflectDir = reflect(rayCasted.direction, hit.normal);
                     Ray reflectRay(hit.point + hit.normal * 0.01f, reflectDir); // Bias e direção da reflexão
 
                     if(recursionDepth < maxRecursionDepth){
                         recursionDepth++;
+                        float reflectionCoefficient = obj->getReflectionCoefficient();
                         color = color * (1.0f - reflectionCoefficient) +  castRay(reflectRay, scene, LightSources, recursionDepth, maxRecursionDepth) * reflectionCoefficient;
                     }
                     

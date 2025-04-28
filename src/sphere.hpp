@@ -15,7 +15,8 @@ struct Sphere : public Object {
     Texture texture;
     bool _isEmitter = false;
     float specularShininess = 32;
-    bool _isMirror = false;
+
+    float reflectionCoefficient = 0.0f;
     float transparency = 0.0f;      // 0 = opaco, 1 = totalmente transparente
     float refractiveIndex = 1.0f;    // 1.0 = ar, 1.5 = vidro, 2.4 = diamante
 
@@ -31,8 +32,8 @@ struct Sphere : public Object {
         return specularShininess;
     }
 
-    bool isMirror() const override{
-        return _isMirror;
+    bool isReflective() const override{
+        return reflectionCoefficient > 0.0f; ;
     }
 
     Sphere(Vec3 c, float r) : center(c), radius(r) { 
@@ -40,7 +41,7 @@ struct Sphere : public Object {
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
 
-    Sphere(Vec3 c, float r, bool isMirror) : center(c), radius(r), _isMirror(isMirror){ 
+    Sphere(Vec3 c, float r, float reflectionCoefficient) : center(c), radius(r), reflectionCoefficient(reflectionCoefficient){ 
         this->type = SPHERE;
         texture = Texture(Color(1.0f, 1.0f, 1.0f));
     }
@@ -65,9 +66,9 @@ struct Sphere : public Object {
         this->type = SPHERE;
         texture = Texture(textureName);
     }
-    Sphere(Vec3 c, float r, Color color, const char* textureName, bool isEmitter, float specularShininess) : center(c), radius(r), color(color), _isEmitter(isEmitter), specularShininess(specularShininess) {
+    Sphere(Vec3 c, float r, Color color, const char* textureName, bool isEmitter, float specularShininess, float reflectionCoefficient, float transparency, float refractiveIndex) : center(c), radius(r), color(color), _isEmitter(isEmitter), specularShininess(specularShininess), reflectionCoefficient(reflectionCoefficient), transparency(transparency), refractiveIndex(refractiveIndex) {
         this->type = SPHERE;
-        texture = Texture(textureName);
+        texture = Texture(textureName, color);
     }
 
     HitInfo intersect(const Ray& ray) const {
@@ -110,5 +111,8 @@ struct Sphere : public Object {
     }
     float getRefractiveIndex() const override { 
         return refractiveIndex; 
+    }
+    float getReflectionCoefficient() const override {
+        return reflectionCoefficient;
     }
 };

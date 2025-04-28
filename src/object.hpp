@@ -28,9 +28,10 @@ struct Object {
     virtual Color getIntensity() const { return Color(0, 0, 0); }
     virtual Vec3 getLightDir(const HitInfo& hit) { return Vec3(0, 0, 0); }
     
-    virtual bool isMirror() const { return false; }
-
+    virtual bool isReflective() const { return false; }
     virtual bool isTransparent() const { return false; }
+
     virtual float getTransparency() const { return 0; }
     virtual float getRefractiveIndex() const { return 1; }
+    virtual float getReflectionCoefficient() const = 0;
 };  

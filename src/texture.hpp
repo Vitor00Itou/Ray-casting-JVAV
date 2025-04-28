@@ -16,6 +16,19 @@ struct Texture {
 
 	Texture () {}
 
+    Texture (const char* filename, Color color) : width(1), height(1), channels(3){
+        data = stbi_load(filename, &width, &height, &channels, 0);
+        if (!data) {
+            data = new unsigned char[channels];
+            unsigned char R = static_cast<unsigned char>(color.r * 255);
+            unsigned char G = static_cast<unsigned char>(color.g * 255);
+            unsigned char B = static_cast<unsigned char>(color.b * 255);
+            data[0] = R;
+            data[1] = G;
+            data[2] = B;
+        }
+    }
+
     Texture (const char* filename) {
         data = stbi_load(filename, &width, &height, &channels, 0);
         if (!data) {

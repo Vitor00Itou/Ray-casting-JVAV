@@ -51,6 +51,9 @@ Sphere* parseSphere(const nlohmann::json& obj) {
     bool isEmitter = obj.value("emitter", false);
     std::string texture = ""; // Sem textura por padrão
     float specularShininess = 32.0f;
+    float transparency = 0.0f;
+    float refractiveIndex = 1.0f;
+    float reflectionCoefficient = 0.0f;
 
     if (obj.contains("color")) {
         color = Color(obj["color"][0], obj["color"][1], obj["color"][2]);
@@ -64,17 +67,30 @@ Sphere* parseSphere(const nlohmann::json& obj) {
         specularShininess = obj["specular"];
     }
 
-    return new Sphere(center, radius, color, texture.c_str(), isEmitter, specularShininess);
+    if (obj.contains("reflection")) {
+        reflectionCoefficient = obj["reflection"];
+    }
+
+    if (obj.contains("refractiveIndex")) {
+        transparency = obj["transparency"];
+    }
+
+    if (obj.contains("refractiveIndex")) {
+        transparency = obj["transparency"];
+    }
+
+    return new Sphere(center, radius, color, texture.c_str(), isEmitter, specularShininess, reflectionCoefficient, transparency, refractiveIndex);
 }
 
 Plane* parsePlane(const nlohmann::json& obj) {
     Vec3 point = Vec3(obj["point"][0], obj["point"][1], obj["point"][2]);
     Vec3 normal = Vec3(obj["normal"][0], obj["normal"][1], obj["normal"][2]);
     Color color = Color(1.0f, 1.0f, 1.0f); // Cor padrão: branco
-    bool isMirror = obj.value("mirror", false);
     std::string texture = ""; // Sem textura por padrão
+    float specularShininess = 32.0f;
     float transparency = 0.0f;
     float refractiveIndex = 1.0f;
+    float reflectionCoefficient = 0.0f;
 
     if (obj.contains("color")) {
         color = Color(obj["color"][0], obj["color"][1], obj["color"][2]);
@@ -82,6 +98,10 @@ Plane* parsePlane(const nlohmann::json& obj) {
 
     if (obj.contains("texture")) {
         texture = obj["texture"];
+    }
+
+    if (obj.contains("specular")) {
+        specularShininess = obj["specular"];
     }
 
     if (obj.contains("transparency")) {
@@ -92,13 +112,12 @@ Plane* parsePlane(const nlohmann::json& obj) {
         refractiveIndex = obj["refractiveIndex"];
     }
 
-    // Se houver textura, criamos o plano com a textura
-    if (!texture.empty()) {
-        return new Plane(point, normal, texture.c_str());
-    } else {
-        // Se não houver textura, criamos o plano com a cor
-        return new Plane(point, normal, color);
+    if (obj.contains("reflection")) {
+        reflectionCoefficient = obj["reflection"];
     }
+
+
+    return new Plane(point, normal, color, texture.c_str(), specularShininess, reflectionCoefficient, transparency, refractiveIndex);
 }
 
 Box* parseBox(const nlohmann::json& obj) {
@@ -109,10 +128,11 @@ Box* parseBox(const nlohmann::json& obj) {
     // Propriedades adicionais
     Color color = Color(1.0f, 1.0f, 1.0f); // Cor padrão: branco
     bool isEmitter = obj.value("emitter", false);
-    bool isMirror = obj.value("mirror", false);
     std::string texture = ""; // Sem textura por padrão
+    float specularShininess = 32.0f;
     float transparency = 0.0f;
     float refractiveIndex = 1.0f;
+    float reflectionCoefficient = 0.0f;
 
     // Verificar e atribuir a cor, se fornecida
     if (obj.contains("color")) {
@@ -124,17 +144,25 @@ Box* parseBox(const nlohmann::json& obj) {
         texture = obj["texture"];
     }
 
-    // Se houver textura, criamos o box com a textura
-    if (!texture.empty()) {
-        
-        return new Box(minCorner, maxCorner, texture.c_str());
-    } else {
-        // Se não houver textura, criamos o box com a cor
-        if (isEmitter) {
-            return new Box(minCorner, maxCorner, color, isEmitter);
-        }
-        return new Box(minCorner, maxCorner, color);
+    if (obj.contains("specular")) {
+        specularShininess = obj["specular"];
     }
+
+    if (obj.contains("transparency")) {
+        transparency = obj["transparency"];
+    }
+
+    if (obj.contains("refractiveIndex")) {
+        refractiveIndex = obj["refractiveIndex"];
+    }
+
+    if (obj.contains("reflection")) {
+        reflectionCoefficient = obj["reflection"];
+    }
+
+    return new Box(minCorner, maxCorner, color, texture.c_str(), isEmitter, specularShininess, reflectionCoefficient, transparency, refractiveIndex);
+
+
 }
 
 void setupScene(const std::string& filename) {
@@ -417,7 +445,8 @@ void mouseMovement(int x, int y) {
 
 
 int main(int argc, char** argv) {
-    setupScene("worlds/scene.json");
+    setupSceneW();
+    //setupScene("worlds/caixas.json");
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
