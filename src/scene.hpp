@@ -1,5 +1,5 @@
-// scene.hpp
 #pragma once
+
 #include "sphere.hpp"
 #include "plane.hpp"
 #include "light_point.hpp"
@@ -7,450 +7,93 @@
 #include "box.hpp"
 #include <vector>
 #include <memory>
-#include <iostream> 
+#include <iostream>
 
+/**
+ * @brief Represents a 3D scene containing objects, light sources, and active selection states.
+ */
 struct Scene {
     std::vector<Object*> objects;
     int currentObj = 0;
 
+    ~Scene() {
+        for (auto obj : objects) {
+            delete obj;
+        }
+        objects.clear();
+    }
+
+    /**
+     * @brief Retrieve pointers to all light emitter objects in the scene.
+     */
     std::vector<Object*> getEmitters() const {
         std::vector<Object*> emitters;
-        for (auto& obj : objects) {
-            if (obj->isEmitter()) {
+        for (const auto& obj : objects) {
+            if (obj && obj->isEmitter()) {
                 emitters.push_back(obj);
             }
         }
         return emitters;
     }
 
-    ~Scene() {
-        for (auto obj : objects) {
-            delete obj;
-        }
-    }
-
     void nextObj() {
-        currentObj = (currentObj + 1) % objects.size();
+        if (objects.empty()) return;
+        currentObj = (currentObj + 1) % static_cast<int>(objects.size());
     }
 
     void previousObj() {
-        currentObj = (currentObj - 1) % objects.size();
+        if (objects.empty()) return;
+        currentObj = (currentObj - 1 + static_cast<int>(objects.size())) % static_cast<int>(objects.size());
     }
 
-    void moveCurrentObjUp() {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere) {
-                    sphere->center.y += 0.1;
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane) {
-                    plane->point.y += 0.1;
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box) {
-                    box->minCorner.y += 0.1;
-                    box->maxCorner.y += 0.1;
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->position.y += 0.1;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
+    Object* getCurrentObject() const {
+        if (currentObj >= 0 && currentObj < static_cast<int>(objects.size())) {
+            return objects[currentObj];
         }
+        return nullptr;
+    }
+
+    // Object movement methods using polymorphic virtual dispatch
+    void moveCurrentObjUp() {
+        if (auto* obj = getCurrentObject()) obj->move(Vec3(0.0f, 0.1f, 0.0f));
     }
 
     void moveCurrentObjDown() {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere) {
-                    sphere->center.y -= 0.1;
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane) {
-                    plane->point.y -= 0.1;
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box) {
-                    box->minCorner.y -= 0.1;
-                    box->maxCorner.y -= 0.1;
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->position.y -= 0.1;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
-        }
+        if (auto* obj = getCurrentObject()) obj->move(Vec3(0.0f, -0.1f, 0.0f));
     }
 
     void moveCurrentObjFront() {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere) {
-                    sphere->center.z += 0.1;
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane) {
-                    plane->point.z += 0.1;
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box) {
-                    box->minCorner.z += 0.1;
-                    box->maxCorner.z += 0.1;
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->position.z += 0.1;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
-        }
+        if (auto* obj = getCurrentObject()) obj->move(Vec3(0.0f, 0.0f, 0.1f));
     }
 
     void moveCurrentObjBack() {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere) {
-                    sphere->center.z -= 0.1;
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane) {
-                    plane->point.z -= 0.1;
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box) {
-                    box->minCorner.z -= 0.1;
-                    box->maxCorner.z -= 0.1;
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->position.z -= 0.1;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
-        }
+        if (auto* obj = getCurrentObject()) obj->move(Vec3(0.0f, 0.0f, -0.1f));
     }
 
     void moveCurrentObjLeft() {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere) {
-                    sphere->center.x += 0.1;
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane) {
-                    plane->point.x += 0.1;
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box) {
-                    box->minCorner.x += 0.1;
-                    box->maxCorner.x += 0.1;
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->position.x += 0.1;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
-        }
+        if (auto* obj = getCurrentObject()) obj->move(Vec3(0.1f, 0.0f, 0.0f));
     }
 
     void moveCurrentObjRight() {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere) {
-                    sphere->center.x -= 0.1;
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane) {
-                    plane->point.x -= 0.1;
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box) {
-                    box->minCorner.x -= 0.1;
-                    box->maxCorner.x -= 0.1;
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->position.x -= 0.1;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
-        }
+        if (auto* obj = getCurrentObject()) obj->move(Vec3(-0.1f, 0.0f, 0.0f));
     }
 
-    void addToLuminosity(float luminosityIncrease) {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere && sphere->isEmitter()) {
-                    sphere->color = sphere->color + Color(luminosityIncrease, luminosityIncrease, luminosityIncrease);
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane && plane->isEmitter()) {
-                    plane->color = plane->color + Color(luminosityIncrease, luminosityIncrease, luminosityIncrease);
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box && box->isEmitter()) {
-                    box->color = box->color + Color(luminosityIncrease, luminosityIncrease, luminosityIncrease);
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->lightColor = lightPoint->lightColor + Color(luminosityIncrease, luminosityIncrease, luminosityIncrease);;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
-        }
+    // Luminosity manipulation methods using polymorphic virtual dispatch
+    void addToLuminosity(float step) {
+        if (auto* obj = getCurrentObject()) obj->addLuminosity(Color(step, step, step));
     }
 
-    void addToLuminosityR(float luminosityIncrease) {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere && sphere->isEmitter()) {
-                    sphere->color = sphere->color + Color(luminosityIncrease, 0, 0);
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane && plane->isEmitter()) {
-                    plane->color = plane->color + Color(luminosityIncrease, 0, 0);
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box && box->isEmitter()) {
-                    box->color = box->color + Color(luminosityIncrease, 0, 0);
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->lightColor = lightPoint->lightColor + Color(luminosityIncrease, 0, 0);;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
-        }
+    void addToLuminosityR(float step) {
+        if (auto* obj = getCurrentObject()) obj->addLuminosity(Color(step, 0.0f, 0.0f));
     }
 
-    void addToLuminosityG(float luminosityIncrease) {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere && sphere->isEmitter()) {
-                    sphere->color = sphere->color + Color(0, luminosityIncrease, 0);
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane && plane->isEmitter()) {
-                    plane->color = plane->color + Color(0, luminosityIncrease, 0);
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box && box->isEmitter()) {
-                    box->color = box->color + Color(0, luminosityIncrease, 0);
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->lightColor = lightPoint->lightColor + Color(0, luminosityIncrease, 0);;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
-        }
+    void addToLuminosityG(float step) {
+        if (auto* obj = getCurrentObject()) obj->addLuminosity(Color(0.0f, step, 0.0f));
     }
 
-    void addToLuminosityB(float luminosityIncrease) {
-        Object* obj = objects[currentObj];
-        switch (obj->type) {
-            case SPHERE: {
-                Sphere* sphere = dynamic_cast<Sphere*>(obj);
-                if (sphere && sphere->isEmitter()) {
-                    sphere->color = sphere->color + Color(0, 0, luminosityIncrease);
-                }
-                break;
-            }
-
-            case PLANE: {
-                Plane* plane = dynamic_cast<Plane*>(obj);
-                if (plane && plane->isEmitter()) {
-                    plane->color = plane->color + Color(0, 0, luminosityIncrease);
-                }
-                break;
-            }
-
-            case BOX: {
-                Box* box = dynamic_cast<Box*>(obj);
-                if (box && box->isEmitter()) {
-                    box->color = box->color + Color(0, 0, luminosityIncrease);
-                }
-                break;
-            }
-
-            case LIGHT_POINT: {
-                LightPoint* lightPoint = dynamic_cast<LightPoint*>(obj);
-                if (lightPoint) {
-                    lightPoint->lightColor = lightPoint->lightColor + Color(0, 0, luminosityIncrease);;
-
-                }
-                break;
-            }
-        
-            default:
-                break;
-        }
+    void addToLuminosityB(float step) {
+        if (auto* obj = getCurrentObject()) obj->addLuminosity(Color(0.0f, 0.0f, step));
     }
 };
+
 
